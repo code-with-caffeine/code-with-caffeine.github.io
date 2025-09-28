@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Kshitij Sinha</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #0a0b0d;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 11, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .hero-section {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .blog-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .blog-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .blog-card:hover::before {
+            left: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.1);
+        }
+
+        .blog-category {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .blog-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .blog-excerpt {
+            color: #a0a0a0;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .read-time {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0a0a0;
+        }
+
+        .floating-ideas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .idea-bubble {
+            position: absolute;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: floatIdea 10s linear infinite;
+        }
+
+        @keyframes floatIdea {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .blog-filters {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-ideas" id="floatingIdeas"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kshitij Sinha</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Portfolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="sd.html">Discipline Tracker</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>My Learning Journey</h1>
+            <p>Documenting my exploration of machine learning, computer science, astronomy, and the art of analytical thinking</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-input" placeholder="Search articles..." id="searchInput">
+        </div>
+
+        <div class="blog-filters">
+            <button class="filter-btn active" data-category="all">All Posts</button>
+            <button class="filter-btn" data-category="machine-learning">Machine Learning</button>
+            <button class="filter-btn" data-category="web-design">Web Design</button>
+            <button class="filter-btn" data-category="astronomy">Astronomy</button>
+            <button class="filter-btn" data-category="learning">Learning</button>
+        </div>
+    </section>
+
+    <section class="blog-container">
+        <div class="blog-grid" id="blogGrid">
+            <article class="blog-card" data-category="machine-learning">
+                <div class="blog-category">Machine Learning</div>
+                <h2 class="blog-title">Building My First Neural Network from Scratch</h2>
+                <p class="blog-excerpt">After diving deep into textbooks, I implemented a neural network from the ground up using only NumPy. Here's what I learned about backpropagation and gradient descent...</p>
+                <div class="blog-meta">
+                    <span>Dec 15, 2024</span>
+                    <span class="read-time">8 min read</span>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="astronomy">
+                <div class="blog-category">Astronomy</div>
+                <h2 class="blog-title">The Beauty of Stellar Classification</h2>
+                <p class="blog-excerpt">Exploring the Morgan-Keenan system and how machine learning can help us classify stars based on their spectral characteristics. A perfect blend of my two passions...</p>
+                <div class="blog-meta">
+                    <span>Dec 10, 2024</span>
+                    <span class="read-time">6 min read</span>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="learning">
+                <div class="blog-category">Learning</div>
+                <h2 class="blog-title">7 Years of Self-Directed Learning: What I've Discovered</h2>
+                <p class="blog-excerpt">Reflecting on my journey from a curious kid to a Grade 12 student with deep expertise in web design and machine learning. The power of analytical thinking...</p>
+                <div class="blog-meta">
+                    <span>Dec 8, 2024</span>
+                    <span class="read-time">10 min read</span>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="web-design">
+                <div class="blog-category">Web Design</div>
+                <h2 class="blog-title">Modern CSS: Creating Immersive Experiences</h2>
+                <p class="blog-excerpt">Techniques I've learned for creating engaging web interfaces using advanced CSS properties, animations, and JavaScript interactions...</p>
+                <div class="blog-meta">
+                    <span>Dec 5, 2024</span>
+                    <span class="read-time">7 min read</span>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="machine-learning">
+                <div class="blog-category">Machine Learning</div>
+                <h2 class="blog-title">Understanding Convolutional Neural Networks</h2>
+                <p class="blog-excerpt">Breaking down the mathematical foundations of CNNs and implementing image classification from first principles. My analytical approach to complex topics...</p>
+                <div class="blog-meta">
+                    <span>Dec 1, 2024</span>
+                    <span class="read-time">12 min read</span>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="astronomy">
+                <div class="blog-category">Astronomy</div>
+                <h2 class="blog-title">Exoplanet Detection Using Machine Learning</h2>
+                <p class="blog-excerpt">How I built a model to detect exoplanets in Kepler mission data, combining my love for space science with practical ML applications...</p>
+                <div class="blog-meta">
+                    <span>Nov 28, 2024</span>
+                    <span class="read-time">9 min read</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <script>
+        // Floating idea bubbles
+        function createIdeaBubbles() {
+            const ideas = ['💡', '🧠', '⚡', '🌟', '🚀', '🔬', '📚', '🌌'];
+            const container = document.getElementById('floatingIdeas');
+            
+            setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'idea-bubble';
+                bubble.textContent = ideas[Math.floor(Math.random() * ideas.length)];
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.width = bubble.style.height = (Math.random() * 60 + 40) + 'px';
+                bubble.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                
+                container.appendChild(bubble);
+                
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.remove();
+                    }
+                }, 10000);
+            }, 2000);
+        }
+
+        // Blog filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blogCards = document.querySelectorAll('.blog-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.getAttribute('data-category');
+                
+                blogCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    if (category === 'all' || cardCategory === category) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeInUp 0.5s ease-out';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            blogCards.forEach(card => {
+                const title = card.querySelector('.blog-title').textContent.toLowerCase();
+                const excerpt = card.querySelector('.blog-excerpt').textContent.toLowerCase();
+                const category = card.querySelector('.blog-category').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || excerpt.includes(searchTerm) || category.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInUp 0.5s ease-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Reset filters when searching
+            if (searchTerm) {
+                filterBtns.forEach(btn => btn.classList.remove('active'));
+            }
+        });
+
+        // Reading progress simulation
+        blogCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const readTime = card.querySelector('.read-time').textContent;
+                const title = card.querySelector('.blog-title').textContent;
+                
+                // Simulate opening article
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0.7';
+                
+                setTimeout(() => {
+                    alert(`Opening: "${title}"\nEstimated ${readTime}`);
+                    card.style.transform = 'translateY(-10px)';
+                    card.style.opacity = '1';
+                }, 200);
+            });
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        blogCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add fadeInUp animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize floating ideas
+        createIdeaBubbles();
+    </script>
+</body>
+</html>

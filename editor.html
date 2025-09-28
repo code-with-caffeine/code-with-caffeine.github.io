@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Editor - Kshitij Sinha</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #0a0b0d;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 11, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        .editor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            /* height: calc(100vh - 6rem); */
+        }
+
+        .editor-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            overflow: auto;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem;
+        }
+
+        .form-textarea {
+            padding: 1rem;
+            min-height: 200px;
+            resize: vertical;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .content-editor {
+            height: 400px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9rem;
+        }
+
+        .preview-panel {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .preview-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            min-height: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .preview-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preview-meta {
+            display: flex;
+            gap: 2rem;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-category {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .preview-excerpt {
+            color: #d0d0d0;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .preview-body {
+            color: #d0d0d0;
+            line-height: 1.7;
+        }
+
+        .preview-body h2 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .preview-body h3 {
+            color: #e0e0e0;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .preview-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-body code {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .preview-body pre {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .preview-body pre code {
+            background: none;
+            color: #e0e0e0;
+            padding: 0;
+        }
+
+        .saved-posts {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .saved-posts-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .saved-post-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .saved-post-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .saved-post-info {
+            flex: 1;
+        }
+
+        .saved-post-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .saved-post-meta {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+        }
+
+        .saved-post-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .json-output {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .word-count {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                height: auto;
+            }
+            
+            .content-editor {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            
+            .nav-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kshitij Sinha</a>
+            <div class="nav-actions">
+                <a href="blog.html" class="btn">← Back to Blog</a>
+                <button class="btn btn-primary" onclick="saveBlog()">💾 Save Post</button>
+                <button class="btn" onclick="previewBlog()">👁️ Preview</button>
+                <button class="btn" onclick="exportJSON()">📄 Export JSON</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="editor-container">
+        <div class="editor-panel">
+            <h2 class="panel-title">✏️ Blog Editor</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Blog Title</label>
+                <input type="text" class="form-input" id="blogTitle" placeholder="Enter your blog title...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="blogCategory">
+                    <option value="machine-learning">Machine Learning</option>
+                    <option value="web-design">Web Design</option>
+                    <option value="astronomy">Astronomy</option>
+                    <option value="learning">Learning</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Excerpt (Brief description for blog listing)</label>
+                <textarea class="form-textarea" id="blogExcerpt" rows="3" placeholder="Write a compelling excerpt that will appear on the blog listing page..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Content</label>
+                <div class="toolbar">
+                    <button class="toolbar-btn" onclick="insertMarkdown('**', '**')">Bold</button>
+                    <button class="toolbar-btn" onclick="insertMarkdown('*', '*')">Italic</button>
+                    <button class="toolbar-btn" onclick="insertMarkdown('## ', '')">H2</button>
+                    <button class="toolbar-btn" onclick="insertMarkdown('### ', '')">H3</button>
+                    <button class="toolbar-btn" onclick="insertMarkdown('`', '`')">Code</button>
+                    <button class="toolbar-btn" onclick="insertCodeBlock()">Code Block</button>
+                    <button class="toolbar-btn" onclick="insertHighlight()">Highlight</button>
+                    <button class="toolbar-btn" onclick="insertMarkdown('- ', '')">List</button>
+                </div>
+                <div style="position: relative;">
+                    <textarea class="form-textarea content-editor" id="blogContent" placeholder="Write your blog content in Markdown...
+
+Example:
+## Introduction
+This is a paragraph with **bold text** and *italic text*.
+
+### Code Example
+Here's some `inline code` and below is a code block:
+
+```python
+def hello_world():
+    print('Hello, World!')
+```
+
+> This is a highlight box for important information.
+
+- List item 1
+- List item 2
+"></textarea>
+                    <div class="word-count" id="wordCount">0 words</div>
+                </div>
+            </div>
+
+            <div class="saved-posts">
+                <div class="saved-posts-title">📚 Saved Posts</div>
+                <div id="savedPostsList">
+                    <!-- Saved posts will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="editor-panel preview-panel">
+            <h2 class="panel-title">👁️ Live Preview</h2>
+            <div class="preview-content" id="previewContent">
+                <div class="preview-category" id="previewCategory">Machine Learning</div>
+                <h1 class="preview-title" id="previewTitle">Your Blog Title Will Appear Here</h1>
+                <div class="preview-meta">
+                    <span>📅 <span id="previewDate"></span></span>
+                    <span>⏱️ <span id="previewReadTime">0 min read</span></span>
+                    <span>👤 Kshitij Sinha</span>
+                </div>
+                <div class="preview-excerpt" id="previewExcerpt">Your excerpt will appear here...</div>
+                <div class="preview-body" id="previewBody">
+                    Start writing your blog content to see the live preview...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Blog data storage
+        let blogPosts = JSON.parse(sessionStorage.getItem('blogPosts') || '[]');
+        let currentEditingId = null;
+
+        // DOM elements
+        const titleInput = document.getElementById('blogTitle');
+        const categorySelect = document.getElementById('blogCategory');
+        const excerptInput = document.getElementById('blogExcerpt');
+        const contentTextarea = document.getElementById('blogContent');
+        const wordCountEl = document.getElementById('wordCount');
+
+        // Preview elements
+        const previewCategory = document.getElementById('previewCategory');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewDate = document.getElementById('previewDate');
+        const previewReadTime = document.getElementById('previewReadTime');
+        const previewExcerpt = document.getElementById('previewExcerpt');
+        const previewBody = document.getElementById('previewBody');
+
+        // Set current date
+        const currentDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        previewDate.textContent = currentDate;
+
+        // Markdown to HTML converter (basic)
+        function markdownToHTML(markdown) {
+            return markdown
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                
+                // Bold and Italic
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                
+                // Code blocks
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                
+                // Inline code
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                
+                // Highlight boxes (using > syntax)
+                .replace(/^> (.*$)/gim, '<div class="highlight">$1</div>')
+                
+                // Lists
+                .replace(/^- (.*$)/gim, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+                
+                // Paragraphs (simple implementation)
+                .split('\n\n')
+                .map(paragraph => {
+                    if (paragraph.trim() && 
+                        !paragraph.includes('<h') && 
+                        !paragraph.includes('<pre') && 
+                        !paragraph.includes('<ul') &&
+                        !paragraph.includes('<div class="highlight">')) {
+                        return `<p>${paragraph.trim()}</p>`;
+                    }
+                    return paragraph;
+                })
+                .join('\n\n');
+        }
+
+        // Update preview in real-time
+        function updatePreview() {
+            const title = titleInput.value || 'Your Blog Title Will Appear Here';
+            const category = categorySelect.value;
+            const excerpt = excerptInput.value || 'Your excerpt will appear here...';
+            const content = contentTextarea.value || 'Start writing your blog content to see the live preview...';
+
+            // Update preview content
+            previewTitle.textContent = title;
+            previewCategory.textContent = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ');
+            previewExcerpt.textContent = excerpt;
+            previewBody.innerHTML = markdownToHTML(content);
+
+            // Calculate reading time
+            const wordCount = content.trim().split(/\s+/).length;
+            const readTime = Math.max(1, Math.ceil(wordCount / 200));
+            previewReadTime.textContent = `${readTime} min read`;
+            wordCountEl.textContent = `${wordCount} words`;
+        }
+
+        // Toolbar functions
+        function insertMarkdown(before, after = '') {
+            const textarea = contentTextarea;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            const newText = before + selectedText + after;
+            textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+            
+            // Set cursor position
+            const newCursorPos = start + before.length + selectedText.length + after.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+            updatePreview();
+        }
+
+        function insertCodeBlock() {
+            insertMarkdown('\n```python\n', '\n```\n');
+        }
+
+        function insertHighlight() {
+            insertMarkdown('\n> ', '\n');
+        }
+
+        // Generate unique ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Generate URL slug
+        function generateSlug(title) {
+            return title.toLowerCase()
+                .replace(/[^a-z0-9 -]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+        }
+
+        // Save blog post
+        function saveBlog() {
+            const title = titleInput.value.trim();
+            const category = categorySelect.value;
+            const excerpt = excerptInput.value.trim();
+            const content = contentTextarea.value.trim();
+
+            if (!title || !excerpt || !content) {
+                showToast('Please fill in all required fields!', 'error');
+                return;
+            }
+
+            const blogPost = {
+                id: currentEditingId || generateId(),
+                title,
+                category,
+                excerpt,
+                content,
+                slug: generateSlug(title),
+                date: currentDate,
+                readTime: Math.max(1, Math.ceil(content.trim().split(/\s+/).length / 200)),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            if (currentEditingId) {
+                // Update existing post
+                const index = blogPosts.findIndex(post => post.id === currentEditingId);
+                if (index !== -1) {
+                    blogPost.createdAt = blogPosts[index].createdAt;
+                    blogPosts[index] = blogPost;
+                }
+            } else {
+                // Add new post
+                blogPosts.unshift(blogPost);
+            }
+
+            sessionStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+            currentEditingId = blogPost.id;
+            
+            updateSavedPostsList();
+            showToast('Blog post saved successfully!', 'success');
+        }
+
+        // Load saved posts
+        function updateSavedPostsList() {
+            const container = document.getElementById('savedPostsList');
+            
+            if (blogPosts.length === 0) {
+                container.innerHTML = '<p style="color: #a0a0a0; text-align: center; padding: 1rem;">No saved posts yet. Create your first blog post!</p>';
+                return;
+            }
+
+            container.innerHTML = blogPosts.map(post => `
+                <div class="saved-post-item" data-id="${post.id}">
+                    <div class="saved-post-info">
+                        <div class="saved-post-title">${post.title}</div>
+                        <div class="saved-post-meta">${post.category} • ${post.date} • ${post.readTime} min read</div>
+                    </div>
+                    <div class="saved-post-actions">
+                        <button class="action-btn" onclick="loadPost('${post.id}')" title="Edit">✏️</button>
+                        <button class="action-btn" onclick="duplicatePost('${post.id}')" title="Duplicate">📋</button>
+                        <button class="action-btn" onclick="deletePost('${post.id}')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load specific post for editing
+        function loadPost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+
+            titleInput.value = post.title;
+            categorySelect.value = post.category;
+            excerptInput.value = post.excerpt;
+            contentTextarea.value = post.content;
+            currentEditingId = id;
+
+            updatePreview();
+            showToast('Post loaded for editing!', 'success');
+        }
+
+        // Duplicate post
+        function duplicatePost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+
+            titleInput.value = post.title + ' (Copy)';
+            categorySelect.value = post.category;
+            excerptInput.value = post.excerpt;
+            contentTextarea.value = post.content;
+            currentEditingId = null;
+
+            updatePreview();
+            showToast('Post duplicated! Don\'t forget to save.', 'success');
+        }
+
+        // Delete post
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                blogPosts = blogPosts.filter(post => post.id !== id);
+                sessionStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+                updateSavedPostsList();
+                
+                if (currentEditingId === id) {
+                    clearEditor();
+                }
+                
+                showToast('Post deleted successfully!', 'success');
+            }
+        }
+
+        // Clear editor
+        function clearEditor() {
+            titleInput.value = '';
+            excerptInput.value = '';
+            contentTextarea.value = '';
+            currentEditingId = null;
+            updatePreview();
+        }
+
+        // Preview blog (simulate opening in new tab)
+        function previewBlog() {
+            const title = titleInput.value.trim();
+            if (!title) {
+                showToast('Please add a title first!', 'error');
+                return;
+            }
+            
+            showToast('Preview would open in new tab!', 'success');
+        }
+
+        // Export JSON
+        function exportJSON() {
+            if (blogPosts.length === 0) {
+                showToast('No posts to export!', 'error');
+                return;
+            }
+
+            const jsonData = JSON.stringify(blogPosts, null, 2);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'blog-posts.json';
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showToast('JSON exported successfully!', 'success');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event listeners
+        titleInput.addEventListener('input', updatePreview);
+        categorySelect.addEventListener('change', updatePreview);
+        excerptInput.addEventListener('input', updatePreview);
+        contentTextarea.addEventListener('input', updatePreview);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        saveBlog();
+                        break;
+                    case 'b':
+                        e.preventDefault();
+                        insertMarkdown('**', '**');
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        insertMarkdown('*', '*');
+                        break;
+                }
+            }
+        });
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        function autoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                if (titleInput.value.trim() && contentTextarea.value.trim()) {
+                    const draftKey = `draft_${currentEditingId || 'new'}`;
+                    const draftData = {
+                        title: titleInput.value,
+                        category: categorySelect.value,
+                        excerpt: excerptInput.value,
+                        content: contentTextarea.value,
+                        timestamp: Date.now()
+                    };
+                    sessionStorage.setItem(draftKey, JSON.stringify(draftData));
+                }
+            }, 5000); // Auto-save every 5 seconds
+        }
+
+        // Load draft on page load
+        function loadDraft() {
+            const draftKey = 'draft_new';
+            const draft = sessionStorage.getItem(draftKey);
+            
+            if (draft) {
+                const draftData = JSON.parse(draft);
+                const timeDiff = Date.now() - draftData.timestamp;
+                
+                // If draft is less than 1 hour old, offer to restore
+                if (timeDiff < 3600000) {
+                    if (confirm('Found an unsaved draft. Would you like to restore it?')) {
+                        titleInput.value = draftData.title;
+                        categorySelect.value = draftData.category;
+                        excerptInput.value = draftData.excerpt;
+                        contentTextarea.value = draftData.content;
+                        updatePreview();
+                        showToast('Draft restored!', 'success');
+                    }
+                }
+            }
+        }
+
+        // Generate blog post data for individual page rendering
+        function generateBlogPageData(post) {
+            return {
+                id: post.id,
+                title: post.title,
+                category: post.category,
+                excerpt: post.excerpt,
+                content: post.content,
+                htmlContent: markdownToHTML(post.content),
+                slug: post.slug,
+                date: post.date,
+                readTime: post.readTime,
+                author: 'Kshitij Sinha',
+                meta: {
+                    description: post.excerpt,
+                    keywords: `${post.category}, Kshitij Sinha, blog, ${post.title}`.toLowerCase(),
+                    ogTitle: post.title,
+                    ogDescription: post.excerpt,
+                    ogImage: '/images/blog-default.jpg' // You can add specific images later
+                },
+                navigation: {
+                    previous: null, // Will be populated based on post order
+                    next: null
+                }
+            };
+        }
+
+        // Generate complete JSON export with metadata
+        function generateCompleteJSON() {
+            const completeData = {
+                site: {
+                    title: 'Kshitij Sinha - Blog',
+                    description: 'My Learning Journey',
+                    author: 'Kshitij Sinha',
+                    baseUrl: 'https://kshitijsinha.com',
+                    lastUpdated: new Date().toISOString()
+                },
+                posts: blogPosts.map((post, index) => {
+                    const postData = generateBlogPageData(post);
+                    
+                    // Add navigation links
+                    if (index > 0) {
+                        postData.navigation.previous = {
+                            title: blogPosts[index - 1].title,
+                            slug: blogPosts[index - 1].slug
+                        };
+                    }
+                    if (index < blogPosts.length - 1) {
+                        postData.navigation.next = {
+                            title: blogPosts[index + 1].title,
+                            slug: blogPosts[index + 1].slug
+                        };
+                    }
+                    
+                    return postData;
+                }),
+                categories: [...new Set(blogPosts.map(post => post.category))],
+                totalPosts: blogPosts.length
+            };
+            
+            return completeData;
+        }
+
+        // New post button
+        function newPost() {
+            if (hasUnsavedChanges()) {
+                if (confirm('You have unsaved changes. Are you sure you want to start a new post?')) {
+                    clearEditor();
+                    showToast('Started new post!', 'success');
+                }
+            } else {
+                clearEditor();
+                showToast('Started new post!', 'success');
+            }
+        }
+
+        // Check for unsaved changes
+        function hasUnsavedChanges() {
+            return titleInput.value.trim() || excerptInput.value.trim() || contentTextarea.value.trim();
+        }
+
+        // Import JSON functionality
+        function importJSON() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if (data.posts && Array.isArray(data.posts)) {
+                                blogPosts = data.posts.map(post => ({
+                                    id: post.id || generateId(),
+                                    title: post.title,
+                                    category: post.category,
+                                    excerpt: post.excerpt,
+                                    content: post.content,
+                                    slug: post.slug || generateSlug(post.title),
+                                    date: post.date,
+                                    readTime: post.readTime,
+                                    createdAt: post.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                }));
+                                sessionStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+                                updateSavedPostsList();
+                                showToast('Blog posts imported successfully!', 'success');
+                            } else {
+                                throw new Error('Invalid JSON format');
+                            }
+                        } catch (error) {
+                            showToast('Error importing JSON: ' + error.message, 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Enhanced export with individual page generation
+        function exportJSON() {
+            if (blogPosts.length === 0) {
+                showToast('No posts to export!', 'error');
+                return;
+            }
+
+            const completeData = generateCompleteJSON();
+            const jsonData = JSON.stringify(completeData, null, 2);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `blog-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showToast('Complete blog data exported!', 'success');
+        }
+
+        // Add auto-save listeners
+        [titleInput, excerptInput, contentTextarea].forEach(element => {
+            element.addEventListener('input', autoSave);
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            updateSavedPostsList();
+            loadDraft();
+            
+            // Add new post and import buttons to nav
+            const navActions = document.querySelector('.nav-actions');
+            const newPostBtn = document.createElement('button');
+            newPostBtn.className = 'btn';
+            newPostBtn.innerHTML = '📝 New Post';
+            newPostBtn.onclick = newPost;
+            
+            const importBtn = document.createElement('button');
+            importBtn.className = 'btn';
+            importBtn.innerHTML = '📁 Import';
+            importBtn.onclick = importJSON;
+            
+            navActions.insertBefore(importBtn, navActions.firstChild);
+            navActions.insertBefore(newPostBtn, navActions.firstChild);
+        });
+
+        // Warn about unsaved changes before leaving
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges()) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // Enhanced markdown parser for better preview
+        function enhancedMarkdownToHTML(markdown) {
+            return markdown
+                // Escape HTML first
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                
+                // Bold and Italic
+                .replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                
+                // Code blocks with language detection
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                    const language = lang ? lang.charAt(0).toUpperCase() + lang.slice(1) : 'Code';
+                    return `<div class="code-block"><div class="code-language">${language}</div><pre><code>${code.trim()}</code></pre></div>`;
+                })
+                
+                // Inline code
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                
+                // Highlight boxes
+                .replace(/^> (.*$)/gim, '<div class="highlight"><strong>Note:</strong> $1</div>')
+                
+                // Links
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+                
+                // Lists
+                .replace(/^- (.*$)/gim, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+                
+                // Line breaks and paragraphs
+                .split('\n\n')
+                .map(paragraph => {
+                    const trimmed = paragraph.trim();
+                    if (trimmed && 
+                        !trimmed.includes('<h') && 
+                        !trimmed.includes('<pre') && 
+                        !trimmed.includes('<ul') &&
+                        !trimmed.includes('<div') &&
+                        !trimmed.includes('<code')) {
+                        return `<p>${trimmed.replace(/\n/g, '<br>')}</p>`;
+                    }
+                    return trimmed;
+                })
+                .join('\n\n')
+                
+                // Clean up empty elements
+                .replace(/<ul>\s*<\/ul>/g, '')
+                .replace(/<p>\s*<\/p>/g, '');
+        }
+
+        // Update the markdownToHTML function reference
+        markdownToHTML = enhancedMarkdownToHTML;
+
+        // Add sample content for demo
+        function loadSampleContent() {
+            titleInput.value = 'My Journey with Machine Learning';
+            categorySelect.value = 'machine-learning';
+            excerptInput.value = 'Exploring the fascinating world of artificial intelligence and sharing my learning experiences along the way.';
+            contentTextarea.value = `## Introduction
+
+This is where my journey with **machine learning** began. After years of curiosity about *artificial intelligence*, I finally decided to dive deep into the mathematical foundations.
+
+### Getting Started
+
+The first challenge was understanding the basics:
+
+- Linear algebra fundamentals
+- Calculus and derivatives
+- Probability and statistics
+
+### My First Project
+
+Here's a simple example of what I learned:
+
+\`\`\`python
+import numpy as np
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Simple neural network prediction
+def predict(inputs, weights):
+    return sigmoid(np.dot(inputs, weights))
+\`\`\`
+
+> **Key Insight**: Understanding the math behind algorithms is crucial for building intuition about when and how to apply them.
+
+## Conclusion
+
+The journey continues, and I'm excited to share more insights as I progress!`;
+            
+            updatePreview();
+            showToast('Sample content loaded!', 'success');
+        }
+
+        // Add sample content button
+        setTimeout(() => {
+            if (blogPosts.length === 0 && !hasUnsavedChanges()) {
+                const sampleBtn = document.createElement('button');
+                sampleBtn.className = 'btn';
+                sampleBtn.innerHTML = '✨ Load Sample';
+                sampleBtn.onclick = loadSampleContent;
+                sampleBtn.style.background = 'rgba(255, 165, 0, 0.2)';
+                sampleBtn.style.borderColor = 'rgba(255, 165, 0, 0.3)';
+                
+                document.querySelector('.nav-actions').appendChild(sampleBtn);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

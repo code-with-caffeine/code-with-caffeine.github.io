@@ -197,14 +197,6 @@
             margin-bottom: 1rem;
         }
 
-        .mini-stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
         /* About Section */
         .about {
             padding: 8rem 2rem;
@@ -298,167 +290,6 @@
         .projects {
             padding: 8rem 2rem;
             background: linear-gradient(180deg, #0a0b0d 0%, #1a1b1e 100%);
-        }
-
-        /* Achievements Section */
-        .achievements {
-            padding: 8rem 2rem;
-            background: #0a0b0d;
-        }
-
-        .achievements-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
-        }
-
-        .achievement-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .achievement-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .achievement-card:hover::before {
-            left: 100%;
-        }
-
-        .achievement-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: #667eea;
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
-        }
-
-        .achievement-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .achievement-year {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(102, 126, 234, 0.2);
-            color: #667eea;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .live-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #a0a0a0;
-            font-size: 1rem;
-        }
-
-        /* Cosmos Section */
-        .cosmos-section {
-            padding: 8rem 2rem;
-            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.1) 0%, #0a0b0d 70%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cosmos-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .cosmos-canvas {
-            position: relative;
-            height: 400px;
-            background: radial-gradient(circle, rgba(0, 0, 50, 0.3) 0%, transparent 70%);
-            border-radius: 20px;
-            margin: 2rem auto;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .planet, .star {
-            position: absolute;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: twinkle 2s ease-in-out infinite alternate;
-        }
-
-        .planet:hover, .star:hover {
-            transform: scale(1.5);
-            filter: brightness(1.5);
-        }
-
-        .planet:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .star:nth-child(2) { top: 30%; right: 20%; animation-delay: 0.5s; }
-        .star:nth-child(3) { bottom: 40%; left: 30%; animation-delay: 1s; }
-        .planet:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 1.5s; }
-        .star:nth-child(5) { top: 60%; left: 50%; animation-delay: 2s; }
-
-        .fact-display {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.7; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.1); }
         }
 
         .projects-container {
@@ -652,7 +483,6 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -663,12 +493,11 @@
         <div class="hero-container">
             <div class="hero-content">
                 <h1>Hi, I'm Kshitij Sinha</h1>
-                <p class="subtitle">CS Student • ML Enthusiast • Web Designer • Astrophile</p>
+                <p class="subtitle">Full Stack Developer & Problem Solver</p>
                 <p class="description">
-                    A Grade 12 student with 7+ years of web design experience and a deep passion for 
-                    computer science, machine learning, and the cosmos. I break down complex problems 
-                    into fundamental pieces and build rigorous solutions through analytical thinking 
-                    and self-directed learning.
+                    I craft exceptional digital experiences through innovative web development, 
+                    combining cutting-edge technologies with creative design to build solutions 
+                    that make a difference. Let's bring your ideas to life.
                 </p>
                 <div class="cta-buttons">
                     <a href="#projects" class="btn-primary">View My Work</a>
@@ -677,12 +506,8 @@
             </div>
             <div class="hero-visual">
                 <div class="floating-card">
-                    <h3>🧠 Self-Taught ML</h3>
-                    <p>7 years of web design + machine learning through rigorous self-study</p>
-                    <div class="mini-stats">
-                        <span>🌟 Grade 12</span>
-                        <span>🚀 7+ Years</span>
-                    </div>
+                    <h3>⚡ Performance First</h3>
+                    <p>Building fast, scalable, and user-friendly applications</p>
                 </div>
             </div>
         </div>
@@ -690,35 +515,35 @@
 
     <section id="about" class="about">
         <div class="about-container">
-            <h2 class="section-title">My Journey & Expertise</h2>
+            <h2 class="section-title">Everything you need for exceptional development</h2>
             <p style="font-size: 1.2rem; color: #a0a0a0; max-width: 800px; margin: 0 auto;">
-                From a curious Grade 12 student to a self-taught ML enthusiast with 7 years of web design experience. 
-                I approach every challenge with analytical thinking, breaking down complex problems into fundamental pieces.
+                I'm a passionate developer who believes in creating solutions that not only work beautifully 
+                but also provide amazing user experiences. Here's what I bring to the table:
             </p>
             
             <div class="about-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>Machine Learning</h3>
-                    <p>Self-taught through rigorous book study and hands-on experimentation with ML models and algorithms.</p>
+                    <div class="feature-icon">🚀</div>
+                    <h3>Full Stack Development</h3>
+                    <p>End-to-end web application development with modern frameworks and technologies.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">🎨</div>
-                    <h3>Web Design (7+ Years)</h3>
-                    <p>Extensive experience in creating beautiful, functional web experiences with modern technologies.</p>
+                    <h3>UI/UX Design</h3>
+                    <p>Creating intuitive and visually appealing interfaces that users love to interact with.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🔬</div>
-                    <h3>Physical Sciences</h3>
-                    <p>Deep fascination with physics, astronomy, and understanding the fundamental nature of our universe.</p>
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performance Optimization</h3>
+                    <p>Building lightning-fast applications optimized for the best user experience.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🧩</div>
-                    <h3>Analytical Thinking</h3>
-                    <p>Breaking down complex problems into fundamental pieces and building structured, logical solutions.</p>
+                    <div class="feature-icon">🔧</div>
+                    <h3>Problem Solving</h3>
+                    <p>Analytical thinking and creative solutions to complex technical challenges.</p>
                 </div>
             </div>
         </div>
@@ -733,114 +558,36 @@
             
             <div class="skills-grid">
                 <div class="skill-item">
-                    <h4>Machine Learning</h4>
-                </div>
-                <div class="skill-item">
-                    <h4>Python</h4>
-                </div>
-                <div class="skill-item">
                     <h4>JavaScript</h4>
-                </div>
-                <div class="skill-item">
-                    <h4>HTML/CSS</h4>
                 </div>
                 <div class="skill-item">
                     <h4>React</h4>
                 </div>
                 <div class="skill-item">
-                    <h4>TensorFlow</h4>
+                    <h4>Node.js</h4>
                 </div>
                 <div class="skill-item">
-                    <h4>Scikit-learn</h4>
+                    <h4>Python</h4>
                 </div>
                 <div class="skill-item">
-                    <h4>Data Analysis</h4>
+                    <h4>MongoDB</h4>
+                </div>
+                <div class="skill-item">
+                    <h4>PostgreSQL</h4>
+                </div>
+                <div class="skill-item">
+                    <h4>AWS</h4>
+                </div>
+                <div class="skill-item">
+                    <h4>Docker</h4>
                 </div>
                 <div class="skill-item">
                     <h4>Git</h4>
                 </div>
                 <div class="skill-item">
-                    <h4>Figma</h4>
+                    <h4>TypeScript</h4>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Achievements Section -->
-    <section id="achievements" class="achievements">
-        <div class="achievements-container">
-            <h2 class="section-title">Achievements & Recognition</h2>
-            <p style="font-size: 1.2rem; color: #a0a0a0; max-width: 800px; margin: 0 auto;">
-                Milestones that showcase my dedication to learning and excellence in computer science
-            </p>
-            
-            <div class="achievements-grid">
-                <div class="achievement-card">
-                    <div class="achievement-icon">🏆</div>
-                    <h3>Self-Taught ML Expert</h3>
-                    <p>Mastered machine learning concepts through independent study of advanced textbooks and practical implementation</p>
-                    <span class="achievement-year">2024</span>
-                </div>
-                
-                <div class="achievement-card">
-                    <div class="achievement-icon">🎯</div>
-                    <h3>7+ Years Web Design</h3>
-                    <p>Consistently developing web design skills since childhood, creating numerous projects and mastering modern frameworks</p>
-                    <span class="achievement-year">2017-2024</span>
-                </div>
-                
-                <div class="achievement-card">
-                    <div class="achievement-icon">⭐</div>
-                    <h3>Academic Excellence</h3>
-                    <p>Maintaining high academic standards while pursuing self-directed learning in computer science and physical sciences</p>
-                    <span class="achievement-year">2024</span>
-                </div>
-                
-                <div class="achievement-card">
-                    <div class="achievement-icon">🚀</div>
-                    <h3>Innovation Projects</h3>
-                    <p>Created multiple ML models and web applications, demonstrating practical application of theoretical knowledge</p>
-                    <span class="achievement-year">2023-2024</span>
-                </div>
-            </div>
-            
-            <!-- Live Stats Counter -->
-            <div class="live-stats">
-                <div class="stat-item">
-                    <div class="stat-number" data-target="7">0</div>
-                    <div class="stat-label">Years Experience</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="25">0</div>
-                    <div class="stat-label">Projects Built</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="10">0</div>
-                    <div class="stat-label">ML Models</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="12">0</div>
-                    <div class="stat-label">Grade Level</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Cosmos Section (New Addictive Feature) -->
-    <section class="cosmos-section">
-        <div class="cosmos-container">
-            <h2 class="section-title">Explore the Cosmos</h2>
-            <p style="font-size: 1.2rem; color: #a0a0a0; max-width: 800px; margin: 0 auto 3rem;">
-                My interest in astronomy and the physical sciences. Click on the icons to discover fascinating facts!
-            </p>
-            <div class="cosmos-canvas" id="cosmosCanvas">
-                <div class="planet" data-fact="The universe is 13.8 billion years old">🪐</div>
-                <div class="star" data-fact="Stars are born in nebulae from collapsing gas clouds">⭐</div>
-                <div class="star" data-fact="Light from the nearest star takes 4.37 years to reach Earth">✨</div>
-                <div class="planet" data-fact="There are over 5,000 confirmed exoplanets">🌍</div>
-                <div class="star" data-fact="A black hole's gravity is so strong that not even light can escape">💫</div>
-            </div>
-            <div class="fact-display" id="factDisplay">Click on a celestial object to learn something amazing!</div>
         </div>
     </section>
 
@@ -853,35 +600,35 @@
             
             <div class="projects-grid">
                 <div class="project-card">
-                    <div class="project-image">🧠</div>
-                    <h3>Custom Neural Network</h3>
-                    <p>Built a Neural Network from scratch without the use of any external libraries for weather prediction, achieving 94% accuracy on custom dataset. Self-taught through textbook implementation.</p>
+                    <div class="project-image">🌐</div>
+                    <h3>E-Commerce Platform</h3>
+                    <p>A full-stack e-commerce solution built with React, Node.js, and MongoDB. Features include user authentication, payment integration, and admin dashboard.</p>
                     <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Python</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Pandas</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">FNN</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">React</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Node.js</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">MongoDB</span>
                     </div>
                 </div>
                 
                 <div class="project-card">
-                    <div class="project-image">🔬</div>
-                    <h3>Medical Research collaboration</h3>
-                    <p>A full-fledged Research collaboration platform for medical researchers, combines my web design and backend skills</p>
+                    <div class="project-image">📱</div>
+                    <h3>Task Management App</h3>
+                    <p>A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.</p>
                     <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">JavaScript</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Django</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">UI design</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Vue.js</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Socket.io</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">PostgreSQL</span>
                     </div>
                 </div>
                 
                 <div class="project-card">
-                    <div class="project-image">🌟</div>
-                    <h3>Astronomy Data Analyzer</h3>
-                    <p>Machine learning model to classify stellar objects from astronomical data, combining my passion for space science with practical ML application.</p>
+                    <div class="project-image">🤖</div>
+                    <h3>AI Data Analytics</h3>
+                    <p>Machine learning platform for data visualization and predictive analytics. Built with Python, TensorFlow, and a React frontend.</p>
                     <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
                         <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Python</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Scikit-learn</span>
-                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">Pandas</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">TensorFlow</span>
+                        <span style="background: rgba(102, 126, 234, 0.2); color: #667eea; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.875rem;">React</span>
                     </div>
                 </div>
             </div>
@@ -925,8 +672,8 @@
         <div class="social-links">
             <a href="https://www.linkedin.com/in/kshitij-sinha-8630442b2/" class="social-link" target="_blank">💼</a>
             <a href="https://github.com" class="social-link" target="_blank">💻</a>
-            <a href="mailto:kshitijshina@gmail.com" class="social-link">📧</a>
-            <a href="https://x.com/Kshitij14616111" class="social-link" target="_blank">🐦</a>
+            <a href="mailto:kshitij@example.com" class="social-link">📧</a>
+            <a href="https://twitter.com" class="social-link" target="_blank">🐦</a>
         </div>
         <p style="color: #a0a0a0;">&copy; 2025 Kshitij Sinha. All rights reserved.</p>
     </footer>
@@ -1247,285 +994,5 @@
 
         createMobileMenu();
     </script>
-    <script>
-        // Cosmos interaction
-                document.querySelectorAll('.planet, .star').forEach(object => {
-                    object.addEventListener('click', function() {
-                        const fact = this.getAttribute('data-fact');
-                        const factDisplay = document.getElementById('factDisplay');
-                        
-                        factDisplay.style.transform = 'scale(0.9)';
-                        factDisplay.style.opacity = '0.5';
-                        
-                        setTimeout(() => {
-                            factDisplay.textContent = fact;
-                            factDisplay.style.transform = 'scale(1)';
-                            factDisplay.style.opacity = '1';
-                            factDisplay.style.background = 'linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)';
-                        }, 150);
-                        
-                        // Add sparkle effect
-                        this.style.filter = 'brightness(2) drop-shadow(0 0 20px #667eea)';
-                        setTimeout(() => {
-                            this.style.filter = '';
-                        }, 300);
-                    });
-                });
-        
-                // Animated counter for stats
-                function animateCounter(element, target, duration = 2000) {
-                    let start = 0;
-                    const increment = target / (duration / 16);
-                    const timer = setInterval(() => {
-                        start += increment;
-                        element.textContent = Math.floor(start);
-                        if (start >= target) {
-                            element.textContent = target;
-                            clearInterval(timer);
-                        }
-                    }, 16);
-                }
-        
-                // Intersection observer for stats animation
-                const statsObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const statNumbers = entry.target.querySelectorAll('.stat-number');
-                            statNumbers.forEach(stat => {
-                                 const target = parseInt(stat.getAttribute('data-target'));
-                                animateCounter(stat, target);
-                            });
-                            statsObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.5 });
-        
-                // Observe stats section
-                const statsSection = document.querySelector('.live-stats');
-                if (statsSection) {
-                    statsObserver.observe(statsSection);
-                }
-        
-                // Achievement cards staggered animation
-                const achievementObserver = new IntersectionObserver((entries) => {
-                    entries.forEach((entry, index) => {
-                        if (entry.isIntersecting) {
-                            setTimeout(() => {
-                                entry.target.style.opacity = '1';
-                                entry.target.style.transform = 'translateY(0) scale(1)';
-                            }, index * 200);
-                        }
-                    });
-                }, { threshold: 0.1 });
-        
-                document.querySelectorAll('.achievement-card').forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(50px) scale(0.9)';
-                    card.style.transition = `all 0.6s ease ${index * 0.1}s`;
-                    achievementObserver.observe(card);
-                });
-        
-                // Easter egg: code for special animation
-                let EasterCode = [];
-                const EasterSequence = ['KeyK', 'KeyS', 'KeyH', 'KeyI', 'KeyT', 'KeyI', 'KeyJ'];
-        
-                document.addEventListener('keydown', (e) => {
-                    EasterCode.push(e.code);
-                    if (EasterCode.length > EasterSequence.length) {
-                        EasterCode.shift();
-                    }
-                    
-                    if (EasterCode.join('') === EasterSequence.join('')) {
-                        triggerSpecialAnimation();
-                        EasterCode = [];
-                    }
-                });
-        
-                function triggerSpecialAnimation() {
-                    // Create rainbow text effect
-                    const title = document.querySelector('.hero-content h1');
-                    title.style.animation = 'rainbow 2s ease-in-out';
-                    
-                    // Add rainbow keyframes
-                    const rainbowStyle = document.createElement('style');
-                    rainbowStyle.textContent = `
-                        @keyframes rainbow {
-                            0% { color: #ff0000; }
-                            16% { color: #ff8000; }
-                            33% { color: #ffff00; }
-                            50% { color: #00ff00; }
-                            66% { color: #0080ff; }
-                            83% { color: #8000ff; }
-                            100% { color: #ff0080; }
-                        }
-                    `;
-                    document.head.appendChild(rainbowStyle);
-                    
-                    // Trigger particle explosion
-                    createMassiveParticleExplosion();
-                    
-                    setTimeout(() => {
-                        title.style.animation = '';
-                        document.head.removeChild(rainbowStyle);
-                    }, 2000);
-                }
-        
-                function createMassiveParticleExplosion() {
-                    const colors = ['#ff0000', '#ff8000', '#ffff00', '#00ff00', '#0080ff', '#8000ff'];
-                    
-                    for (let i = 0; i < 100; i++) {
-                        const particle = document.createElement('div');
-                        particle.style.cssText = `
-                            position: fixed;
-                            width: 100px;
-                            height: 100px;
-                            background: ${colors[Math.floor(Math.random() * colors.length)]};
-                            border-radius: 50%;
-                            pointer-events: none;
-                            z-index: 10000;
-                            left: 50vw;
-                            top: 50vh;
-                        `;
-                        
-                        document.body.appendChild(particle);
-                        
-                        const angle = (Math.PI * 2 * i) / 50;
-                        const distance = Math.random() * 300 + 100;
-                        const duration = Math.random() * 1000 + 1000;
-                        
-                        particle.animate([
-                            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
-                            { 
-                                transform: `translate(${Math.cos(angle) * distance - 50}%, ${Math.sin(angle) * distance - 50}%) scale(0)`, 
-                                opacity: 0 
-                            }
-                        ], {
-                            duration: duration,
-                            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-                        }).onfinish = () => particle.remove();
-                    }
-                }
-        
-                // Mouse trail effect
-                let mouseTrail = [];
-                document.addEventListener('mousemove', (e) => {
-                    mouseTrail.push({ x: e.clientX, y: e.clientY, time: Date.now() });
-                    
-                    // Keep only recent points
-                    mouseTrail = mouseTrail.filter(point => Date.now() - point.time < 500);
-                    
-                    // Create trail particle occasionally
-                    if (Math.random() < 0.1) {
-                        createTrailParticle(e.clientX, e.clientY);
-                    }
-                });
-        
-                function createTrailParticle(x, y) {
-                    const particle = document.createElement('div');
-                    particle.style.cssText = `
-                        position: fixed;
-                        width: 4px;
-                        height: 4px;
-                        background: rgba(102, 126, 234, 0.6);
-                        border-radius: 50%;
-                        pointer-events: none;
-                        z-index: 1000;
-                        left: ${x}px;
-                        top: ${y}px;
-                    `;
-                    
-                    document.body.appendChild(particle);
-                    
-                    particle.animate([
-                        { opacity: 0.6, transform: 'scale(1)' },
-                        { opacity: 0, transform: 'scale(0)' }
-                    ], {
-                        duration: 500,
-                        easing: 'ease-out'
-                    }).onfinish = () => particle.remove();
-                }
-        
-                // Progressive loading simulation
-                function createLoadingSequence() {
-                    const sections = ['about', 'skills', 'achievements', 'projects', 'contact'];
-                    sections.forEach((sectionId, index) => {
-                        const section = document.getElementById(sectionId);
-                        if (section) {
-                            section.style.opacity = '0';
-                            section.style.transform = 'translateY(50px)';
-                            
-                            setTimeout(() => {
-                                section.style.transition = 'all 1s ease';
-                                section.style.opacity = '1';
-                                section.style.transform = 'translateY(0)';
-                            }, (index + 1) * 300);
-                        }
-                    });
-                }
-        
-                // Initialize progressive loading on page load
-                window.addEventListener('load', () => {
-                    setTimeout(createLoadingSequence, 500);
-                });
-        
-                // Scroll-triggered sound effect simulation (visual feedback)
-                function createScrollFeedback() {
-                    const scrollIndicator = document.querySelector('.scroll-indicator');
-                    let lastScrollTime = 0;
-                    
-                    window.addEventListener('scroll', () => {
-                        const now = Date.now();
-                        if (now - lastScrollTime > 100) {
-                            scrollIndicator.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.8)';
-                            setTimeout(() => {
-                                scrollIndicator.style.boxShadow = '';
-                            }, 100);
-                            lastScrollTime = now;
-                        }
-                    });
-                }
-        
-                createScrollFeedback();
-        
-                // Theme switcher (hidden feature)
-                let clickCount = 0;
-                document.querySelector('.logo').addEventListener('click', () => {
-                    clickCount++;
-                    if (clickCount === 5) {
-                        toggleTheme();
-                        clickCount = 0;
-                    }
-                });
-        
-                function toggleTheme() {
-                    const body = document.body;
-                    const isLight = body.classList.contains('light-theme');
-                    
-                    if (isLight) {
-                        body.classList.remove('light-theme');
-                    } else {
-                        body.classList.add('light-theme');
-                        // Add light theme styles
-                        const lightStyle = document.createElement('style');
-                        lightStyle.id = 'light-theme-style';
-                        lightStyle.textContent = `
-                            .light-theme {
-                                background: #f8f9fa !important;
-                                color: #333 !important;
-                            }
-                            .light-theme .navbar {
-                                background: rgba(248, 249, 250, 0.95) !important;
-                                color: #333 !important;
-                            }
-                            .light-theme .nav-links a {
-                                color: #333 !important;
-                            }
-                        `;
-                        document.head.appendChild(lightStyle);
-                    }
-                }
-        
-                createMobileMenu();
-            </script>
 </body>
 </html>

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building My First Neural Network from Scratch - Kshitij Sinha</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #0a0b0d;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 11, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateX(-5px);
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .article-category {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        .article-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem;
+            color: #e0e0e0;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #d0d0d0;
+            font-size: 1.1rem;
+        }
+
+        .article-content code {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .code-block code {
+            background: none;
+            color: #e0e0e0;
+            padding: 0;
+            font-size: 0.95rem;
+            white-space: pre;
+            display: block;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 1.5rem;
+            padding-left: 1.5rem;
+            border-left: 4px solid #667eea;
+            border-radius: 0 10px 10px 0;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        /* .highlight::before {
+            content: '💡';
+            position: absolute;
+            left: 8px;
+            top: 1rem;
+            background: #0a0b0d;
+            padding: .5rem;
+            font-size: 1rem;
+            border-radius: 50%;
+        } */
+
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 3rem 0;
+            gap: 1rem;
+        }
+
+        .nav-post {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-post:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-post-label {
+            font-size: 0.8rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-post-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .share-section {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 3rem 0;
+        }
+
+        .share-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-2px);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #667eea;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 15s linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        .table-of-contents {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            /* position: absolute; */
+            top: 100px;
+            z-index: 10;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 0.3rem 0;
+        }
+
+        .toc-link:hover {
+            color: #667eea;
+            padding-left: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .article-content {
+                padding: 2rem;
+            }
+
+            .article-navigation {
+                flex-direction: column;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements" id="floatingElements"></div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kshitij Sinha</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Portfolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="blog.html" class="back-btn">
+                ← Back to Blog
+            </a>
+        </div>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <div class="article-category">Machine Learning</div>
+            <h1 class="article-title">Building My First Neural Network from Scratch</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <span>📅</span>
+                    <span>December 15, 2024</span>
+                </div>
+                <div class="meta-item">
+                    <span>⏱️</span>
+                    <span>8 min read</span>
+                </div>
+                <div class="meta-item">
+                    <span>👤</span>
+                    <span>Kshitij Sinha</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="table-of-contents">
+            <div class="toc-title">Table of Contents</div>
+            <ul class="toc-list">
+                <li class="toc-item"><a href="#introduction" class="toc-link">Introduction</a></li>
+                <li class="toc-item"><a href="#theory" class="toc-link">Understanding the Theory</a></li>
+                <li class="toc-item"><a href="#implementation" class="toc-link">Implementation from Scratch</a></li>
+                <li class="toc-item"><a href="#challenges" class="toc-link">Challenges I Faced</a></li>
+                <li class="toc-item"><a href="#results" class="toc-link">Results and Insights</a></li>
+                <li class="toc-item"><a href="#conclusion" class="toc-link">Conclusion</a></li>
+            </ul>
+        </div>
+
+        <div class="article-content">
+            <section id="introduction">
+                <h2>Introduction</h2>
+                <p>When I first encountered the concept of neural networks in my machine learning studies, I was fascinated by how these mathematical structures could mimic the learning patterns of biological brains. Rather than simply using existing libraries like TensorFlow or PyTorch, I decided to challenge myself by implementing a neural network from the ground up using only NumPy.</p>
+                
+                <p>This journey taught me more about the fundamental concepts of deep learning than any tutorial or course could have. In this post, I'll walk you through my experience building a neural network from scratch, the challenges I encountered, and the profound insights I gained along the way.</p>
+            </section>
+
+            <div class="highlight">
+                <strong>Key Takeaway:</strong> Building neural networks from scratch provides unparalleled insight into how these powerful algorithms actually work under the hood.
+            </div>
+
+            <section id="theory">
+                <h2>Understanding the Theory</h2>
+                <p>Before diving into code, I spent considerable time understanding the mathematical foundations. A neural network is essentially a function approximator that learns through iterative optimization. The core concepts I needed to master were:</p>
+
+                <h3>Forward Propagation</h3>
+                <p>The process of passing input data through the network layers to generate predictions. Each layer applies a linear transformation followed by a non-linear activation function:</p>
+
+                <div class="code-block">
+                    <code>def forward_propagation(X, weights, biases):
+    # Linear transformation
+    z = np.dot(X, weights) + biases
+    # Non-linear activation
+    a = sigmoid(z)
+    return a, z</code>
+                </div>
+
+                <h3>Backpropagation</h3>
+                <p>The algorithm that computes gradients by working backwards through the network using the chain rule of calculus. This is where the magic happens - the network learns by understanding how each parameter contributes to the final error.</p>
+            </section>
+
+            <section id="implementation">
+                <h2>Implementation from Scratch</h2>
+                <p>My implementation started simple with a basic feedforward network for binary classification. Here's the core structure I built:</p>
+
+                <div class="code-block">
+                    <code>
+class NeuralNetwork:
+    def __init__(self, input_size, hidden_size, output_size):
+        self.W1 = np.random.randn(input_size, hidden_size) * 0.01
+        self.b1 = np.zeros((1, hidden_size))
+        self.W2 = np.random.randn(hidden_size, output_size) * 0.01
+        self.b2 = np.zeros((1, output_size))
+
+    def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+
+    def sigmoid_derivative(self, a):
+        return a * (1 - a)
+
+    def softmax(self, z):
+        exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
+        return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+
+    def one_hot(self, y, num_classes):
+        one_hot_y = np.zeros((y.size, num_classes))
+        one_hot_y[np.arange(y.size), y] = 1
+        return one_hot_y
+
+    def compute_loss(self, y_true, y_pred):
+        m = y_true.shape[0]
+        return -np.sum(y_true * np.log(y_pred + 1e-9)) / m
+
+    def train(self, X, y, epochs=100, lr=0.01):
+        num_classes = len(np.unique(y))
+        y_encoded = self.one_hot(y, num_classes)
+        for epoch in range(epochs):
+            # Forward pass
+            Z1 = X.dot(self.W1) + self.b1
+            A1 = self.sigmoid(Z1)
+            Z2 = A1.dot(self.W2) + self.b2
+            A2 = self.softmax(Z2)
+
+            # Loss
+            loss = self.compute_loss(y_encoded, A2)
+            if epoch % 10 == 0:
+                print(f"Epoch {epoch}, Loss: {loss:.4f}")
+
+            # Backward pass
+             # output layer
+            dZ2 = A2 - y_encoded
+            dW2 = A1.T.dot(dZ2) / X.shape[0] # We need to transpose A1 to match the shapes for matrix multiplication (dot product).
+            db2 = np.sum(dZ2, axis=0, keepdims=True) / X.shape[0]
+             # hidden layer
+            dA1 = dZ2.dot(self.W2.T)
+            dZ1 = dA1 * self.sigmoid_derivative(A1)
+            dW1 = X.T.dot(dZ1) / X.shape[0]
+            db1 = np.sum(dZ1, axis=0, keepdims=True) / X.shape[0]
+
+            # Update weights
+            self.W1 -= lr * dW1
+            self.b1 -= lr * db1
+            self.W2 -= lr * dW2
+            self.b2 -= lr * db2
+
+    def predict(self, X):
+        A1 = self.sigmoid(X.dot(self.W1) + self.b1)
+        A2 = self.softmax(A1.dot(self.W2) + self.b2)
+        return np.argmax(A2, axis=1)
+
+                    </code>
+                </div>
+
+                <p>The most challenging part was implementing backpropagation correctly. I had to carefully track how gradients flowed through each layer, ensuring that the chain rule was applied correctly at every step.</p>
+            </section>
+
+            <section id="challenges">
+                <h2>Challenges I Faced</h2>
+                <p>Building a neural network from scratch presented several significant challenges that pushed my analytical thinking to its limits:</p>
+
+                <h3>Gradient Vanishing</h3>
+                <p>My first implementation suffered from vanishing gradients in deeper networks. The gradients became exponentially smaller as they propagated backwards, making the early layers learn extremely slowly. I solved this by implementing better weight initialization techniques and experimenting with different activation functions.</p>
+
+                <h3>Numerical Stability</h3>
+                <p>I encountered issues with numerical overflow and underflow, especially when computing exponentials in the softmax function. Learning to implement numerically stable versions of these functions was crucial.</p>
+
+                <div class="highlight">
+                    <strong>Debugging Tip:</strong> Always print intermediate values during forward and backward passes. This helped me catch subtle bugs in my gradient calculations that would have been nearly impossible to find otherwise.
+                </div>
+            </section>
+
+            <section id="results">
+                <h2>Results and Insights</h2>
+                <p>After weeks of debugging and refinement, my neural network finally worked! I tested it on the classic XOR problem and achieved 100% accuracy. More importantly, I gained deep insights into:</p>
+
+                <h3>The Role of Non-linearity</h3>
+                <p>Without activation functions, neural networks would just be linear transformations stacked on top of each other - essentially just glorified linear regression. The non-linear activations are what give neural networks their power to approximate complex functions.</p>
+
+                <h3>Learning Rate Dynamics</h3>
+                <p>I experimented with different learning rates and discovered the delicate balance required. Too high, and the network would overshoot optimal solutions; too low, and learning would be painfully slow.</p>
+            </section>
+
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <p>Building a neural network from scratch was one of the most educational experiences of my machine learning journey. It demystified the "black box" nature of deep learning and gave me a profound appreciation for the mathematical elegance underlying these systems.</p>
+
+                <p>While modern frameworks make implementing neural networks much easier, I believe every serious machine learning practitioner should go through this exercise at least once. The deep understanding you gain is invaluable for debugging, optimizing, and innovating in the field.</p>
+
+                <p>My next challenge? Implementing a convolutional neural network from scratch. The adventure continues!</p>
+            </section>
+        </div>
+
+        <div class="share-section">
+            <h3 class="share-title">Found this helpful? Share it!</h3>
+            <div class="share-buttons">
+                <a href="#" class="share-btn" onclick="sharePost('twitter')">
+                    <span>🐦</span> Twitter
+                </a>
+                <a href="#" class="share-btn" onclick="sharePost('linkedin')">
+                    <span>💼</span> LinkedIn
+                </a>
+                <a href="#" class="share-btn" onclick="copyLink()">
+                    <span>🔗</span> Copy Link
+                </a>
+                <a href="#" class="share-btn" onclick="sharePost('email')">
+                    <span>📧</span> Email
+                </a>
+            </div>
+        </div>
+
+        <nav class="article-navigation">
+            <a href="#" class="nav-post" onclick="navigateToPost('prev')">
+                <div class="nav-post-label">← Previous Post</div>
+                <div class="nav-post-title">Understanding Convolutional Neural Networks</div>
+            </a>
+            <a href="#" class="nav-post" onclick="navigateToPost('next')">
+                <div class="nav-post-label">Next Post →</div>
+                <div class="nav-post-title">The Beauty of Stellar Classification</div>
+            </a>
+        </nav>
+    </article>
+
+    <script>
+        // Floating particles animation
+        function createFloatingParticles() {
+            const container = document.getElementById('floatingElements');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 15000);
+            }, 3000);
+        }
+
+        // Reading progress bar
+        function updateProgressBar() {
+            const article = document.querySelector('.article-content');
+            const progressBar = document.getElementById('progressBar');
+            
+            const articleTop = article.offsetTop;
+            const articleHeight = article.offsetHeight;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset;
+            
+            const progress = Math.min(
+                Math.max((scrollTop - articleTop + windowHeight * 0.5) / articleHeight, 0), 1
+            );
+            
+            progressBar.style.width = (progress * 100) + '%';
+        }
+
+        // Smooth scrolling for table of contents
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 120;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Share functionality
+        function sharePost(platform) {
+            const url = window.location.href;
+            const title = document.querySelector('.article-title').textContent;
+            const text = `Check out this article: ${title}`;
+            
+            switch(platform) {
+                case 'twitter':
+                    alert(`Sharing to Twitter:\n${text}\n${url}`);
+                    break;
+                case 'linkedin':
+                    alert(`Sharing to LinkedIn:\n${text}\n${url}`);
+                    break;
+                case 'email':
+                    alert(`Sharing via Email:\nSubject: ${title}\nBody: ${text}\n${url}`);
+                    break;
+            }
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(() => {
+                alert('Could not copy link. Please copy manually: ' + url);
+            });
+        }
+
+        // Navigation functionality
+        function navigateToPost(direction) {
+            if (direction === 'prev') {
+                alert('Navigating to: Understanding Convolutional Neural Networks');
+            } else {
+                alert('Navigating to: The Beauty of Stellar Classification');
+            }
+        }
+
+        // Highlight active section in TOC
+        function highlightActiveSection() {
+            const sections = document.querySelectorAll('section[id]');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    currentSection = section.id;
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                const href = link.getAttribute('href').substring(1);
+                if (href === currentSection) {
+                    link.style.color = '#667eea';
+                    link.style.fontWeight = '600';
+                } else {
+                    link.style.color = '#a0a0a0';
+                    link.style.fontWeight = '400';
+                }
+            });
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            updateProgressBar();
+            highlightActiveSection();
+        });
+
+        window.addEventListener('load', () => {
+            updateProgressBar();
+            highlightActiveSection();
+        });
+
+        // Initialize animations
+        createFloatingParticles();
+
+        // Smooth fade-in animation for content
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all content sections
+        document.querySelectorAll('section, .highlight, .code-block').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add reading time estimation
+        function estimateReadingTime() {
+            const articleText = document.querySelector('.article-content').textContent;
+            const wordsPerMinute = 200;
+            const wordCount = articleText.trim().split(/\s+/).length;
+            const readTime = Math.ceil(wordCount / wordsPerMinute);
+            
+            // Update the reading time in the meta
+            const readTimeElement = document.querySelector('.article-meta .meta-item:nth-child(2) span:last-child');
+            if (readTimeElement) {
+                readTimeElement.textContent = `${readTime} min read`;
+            }
+        }
+
+        // Initialize reading time estimation
+        estimateReadingTime();
+
+        // Add typing effect for code blocks
+        function typewriterEffect(element, text, speed = 50) {
+            element.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Trigger typewriter effect when code blocks come into view
+        const codeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const codeElement = entry.target.querySelector('code');
+                    if (codeElement && !codeElement.dataset.typed) {
+                        const originalText = codeElement.textContent;
+                        typewriterEffect(codeElement, originalText, 30);
+                        codeElement.dataset.typed = 'true';
+                        codeObserver.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.code-block').forEach(block => {
+            codeObserver.observe(block);
+        });
+    </script>
+</body>
+</html>
