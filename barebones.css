@@ -1,0 +1,79 @@
+/* Layout-only CSS: no colors, fonts, or fancy styling */
+
+/* Basic page reset */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Header and navigation */
+header {
+  text-align: center;
+  padding: 1em;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 0.5em;
+}
+
+/* Section structure */
+section {
+  padding: 2em 1em;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* About section image alignment */
+.flag {
+  display: block;
+  margin: 1em auto;
+  max-width: 100%;
+  transform: scale(.7);
+  height: auto;
+}
+
+/* Treasures grid layout */
+.treasure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1em;
+}
+
+.treasure {
+  padding: 1em;
+  border: 1px solid #ccc;
+}
+
+/* Contact form layout */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+input, textarea, button {
+  padding: 0.5em;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Footer alignment */
+footer {
+  text-align: center;
+  padding: 1em;
+  margin-top: 2em;
+  border-top: 1px solid #ccc;
+}
+
+/* Utility classes */
+.hidden {
+  display: none;
+}

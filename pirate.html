@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captain Redbeard’s Portfolio</title>
+  <link rel="stylesheet" href="pirate.css" />
+</head>
+<body>
+  <header>
+    <h1>Captain Redbeard</h1>
+    <p>Treasure Hunter • Map Maker • Rum Connoisseur</p>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#treasures">Treasures</a>
+      <a href="#contact">Message in a Bottle</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>About the Captain</h2>
+    <p>
+      Ahoy! I be Captain Redbeard, scourge of the Seven Seas and finder of the lost treasures of the Caribbean.
+      When I’m not plundering ships or drawing maps, I craft fine nautical charts and sing shanties by moonlight.
+    </p>
+    <img src="flag.png" alt="Pirate flag" class="flag">
+  </section>
+
+  <section id="treasures">
+    <h2>Treasures & Adventures</h2>
+    <div class="treasure-grid">
+      <div class="treasure">
+        <h3>⚓ The Lost Gold of Tortuga</h3>
+        <p>Recovered from the depths in 1721, after a fierce battle with rival corsairs.</p>
+      </div>
+      <div class="treasure">
+        <h3>🗺️ Map of the Siren’s Reef</h3>
+        <p>Hand-drawn map of treacherous waters filled with sirens and sea serpents.</p>
+      </div>
+      <div class="treasure">
+        <h3>🍶 The Eternal Rum Flask</h3>
+        <p>Never runs dry. A pirate’s best mate (next to his parrot, of course).</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Send a Message in a Bottle</h2>
+    <form id="message-form">
+      <label for="name">Yer Name:</label>
+      <input type="text" id="name" name="name" required>
+      
+      <label for="message">Yer Message:</label>
+      <textarea id="message" name="message" required></textarea>
+      
+      <button type="submit">Send It, Arrr!</button>
+    </form>
+    <p id="response" class="hidden">Yer message be sent across the seas!</p>
+  </section>
+
+  <footer>
+    <p>© 1725 Captain Redbeard — All plunders reserved.</p>
+  </footer>
+
+  <script src="pirate.js"></script>
+</body>
+</html>
