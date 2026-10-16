@@ -14,7 +14,854 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: #0a0b0d;
-            color: #ffffff;
+  <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kshitij Sinha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a night-sky field notebook. The hero is an explorable constellation of five interests that filters the work list. The sky section is a fixed night scene where hovering an object tints the sky and sends its light toward you. Ink-blue ground, one periwinkle accent, serif display, grotesk body, mono labels. */
+@property --c { syntax: "<color>"; inherits: true; initial-value: #a9b4ff; }
+:root {
+  --bg: #0a0e1a;
+  --surface: #10162a;
+  --line: #222b48;
+  --fg: #e8ebf5;
+  --muted: #9aa3bd;
+  --accent: #a9b4ff;
+  --accent-ink: #0a0e1a;
+  --star: #cfd6ff;
+  --night: #080c1b;
+  --night-fg: #e8ebf5;
+  --night-muted: #98a1bd;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f3f4f9; --surface: #ffffff; --line: #d9dcea; --fg: #14182b; --muted: #555d78;
+    --accent: #3b46c9; --accent-ink: #ffffff; --star: #3b46c9; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f3f4f9; --surface: #ffffff; --line: #d9dcea; --fg: #14182b; --muted: #555d78;
+  --accent: #3b46c9; --accent-ink: #ffffff; --star: #3b46c9; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 2rem;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.mono { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Custom cursor: a star that becomes a crescent moon over clickable things, with a fading trail (mouse and trackpad only) */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+.cur-trail { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 9998; pointer-events: none; }
+.cur-head { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; color: var(--accent); }
+.cur-body {
+  position: relative; width: 22px; height: 22px;
+  transition: transform 0.3s cubic-bezier(.2,.7,.2,1);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 70%, transparent)) drop-shadow(0 0 1px var(--bg));
+}
+.cur-spin { position: absolute; inset: 0; animation: curspin 9s linear infinite; }
+.cur-star, .cur-moon {
+  position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor;
+  stroke: var(--bg); stroke-width: 2.2; stroke-linejoin: round; paint-order: stroke;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(.2,.7,.2,1);
+}
+.cur-head.inv { color: var(--accent-ink); }
+.cur-head.inv .cur-star, .cur-head.inv .cur-moon { stroke: var(--accent); }
+.cur-head.night { color: #e8ebf5; }
+.cur-head.night .cur-star, .cur-head.night .cur-moon { stroke: #080c1b; }
+.cur-moon { opacity: 0; transform: scale(0.3) rotate(-70deg); }
+.cur-head.hot .cur-star { opacity: 0; transform: scale(0.3); }
+.cur-head.hot .cur-moon { opacity: 1; transform: scale(1.1) rotate(0deg); }
+.cur-head.hot .cur-body { transform: scale(1.3); }
+.cur-head.down .cur-body { transform: scale(0.8); }
+.cur-head.hot.down .cur-body { transform: scale(1.05); }
+@keyframes curspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cur-spin { animation: none; } }
+
+/* Header */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 11;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding-block: 0.8rem; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; color: var(--fg); text-decoration: none; }
+nav { display: flex; align-items: center; gap: 0.4rem 1.1rem; flex-wrap: wrap; }
+nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+nav a:hover { color: var(--fg); }
+.theme-btn {
+  font: inherit; font-size: 0.8rem; color: var(--muted); background: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.75rem; cursor: pointer;
+}
+.theme-btn:hover { color: var(--fg); border-color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: center; padding-block: 3.5rem 4rem; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+  line-height: 1.02; letter-spacing: -0.02em; margin: 0.9rem 0 1.4rem; text-wrap: balance;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.lede { font-size: 1.12rem; color: var(--muted); max-width: 34rem; margin: 0 0 1.75rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.btn {
+  display: inline-block; font-weight: 500; font-size: 0.95rem; text-decoration: none;
+  padding: 0.65rem 1.2rem; border-radius: 6px; border: 1px solid var(--line); color: var(--fg);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.solid { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.solid:hover { color: var(--accent-ink); filter: brightness(1.08); }
+
+.sky {
+  position: relative; height: 420px; border: 1px solid var(--line); border-radius: 14px;
+  background: radial-gradient(ellipse at 30% 20%, color-mix(in srgb, var(--accent) 10%, var(--surface)) 0%, var(--surface) 70%);
+  overflow: hidden; min-width: 0;
+}
+.sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.node {
+  position: absolute; transform: translate(-50%, -50%);
+  font: inherit; font-size: 0.82rem; font-weight: 500; color: var(--fg); cursor: pointer;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border: 1px solid var(--line); border-radius: 999px; padding: 0.35rem 0.8rem 0.35rem 0.65rem;
+  display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+  transition: border-color 0.2s, background 0.2s;
+}
+.node::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+.node:hover { border-color: var(--accent); }
+.node[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.node[aria-pressed="true"]::before { background: var(--accent-ink); box-shadow: none; }
+.sky-hint { position: absolute; left: 1rem; bottom: 0.8rem; margin: 0; }
+
+/* Sections */
+section { padding-block: 4.5rem; border-top: 1px solid var(--line); scroll-margin-top: 4rem; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 2rem; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 1.5rem; text-wrap: balance; }
+.sec-body { min-width: 0; }
+.sec-body p { max-width: 38rem; margin: 0 0 1.1rem; }
+.muted { color: var(--muted); }
+
+/* About */
+.quote {
+  margin: 2.2rem 0; padding: 0; max-width: 38rem;
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.2; color: var(--accent); text-wrap: balance;
+}
+.quote small { display: block; margin-top: 0.7rem; font-family: var(--font-mono); font-style: normal; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.timeline { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; max-width: 38rem; border-left: 1px solid var(--line); }
+.timeline li { position: relative; padding: 0 0 1.4rem 1.5rem; }
+.timeline li::before { content: ""; position: absolute; left: -4px; top: 0.6rem; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.timeline .mono { display: block; margin-bottom: 0.15rem; }
+
+/* Awards */
+.awards { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.awards li { display: grid; grid-template-columns: minmax(0, 10rem) minmax(0, 1fr); gap: 1.5rem; padding: 1.3rem 0; border-bottom: 1px solid var(--line); }
+.awards h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.25; margin: 0 0 0.3rem; }
+.awards p { margin: 0; color: var(--muted); max-width: 36rem; }
+
+/* Work list */
+.filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; min-height: 2rem; margin: 0 0 1rem; }
+.clear { font: inherit; font-size: 0.85rem; color: var(--accent); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+.work { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.work li { border-bottom: 1px solid var(--line); padding: 1.6rem 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 15rem); gap: 1.5rem; transition: opacity 0.25s; }
+.work li.dim { opacity: 0.32; }
+.work h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; line-height: 1.2; margin: 0 0 0.5rem; }
+.work p { margin: 0; color: var(--muted); max-width: 36rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-content: flex-start; justify-content: flex-end; }
+.chip { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0.15rem 0.5rem; }
+.more { margin-top: 1.5rem; }
+.body { display: flex; gap: 1.1rem; align-items: flex-start; }
+.body > div:last-child { min-width: 0; }
+.thumb {
+  flex: 0 0 84px; width: 84px; height: 84px; border: 1px dashed var(--muted); border-radius: 8px;
+  display: grid; place-items: center; text-align: center; color: var(--muted);
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; object-fit: cover;
+}
+.item-links { margin-top: 0.7rem; font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; }
+.note { margin-top: 0.7rem !important; font-size: 0.9rem; }
+.sketch { margin: 0; max-width: 40rem; }
+.sketch-frame {
+  aspect-ratio: 4 / 3; max-width: 100%; border: 1px dashed var(--muted); border-radius: 10px;
+  display: grid; place-items: center; text-align: center; padding: 1rem; color: var(--muted); background: var(--surface);
+}
+.sketch img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.sketch figcaption { margin-top: 0.7rem; }
+
+/* Writing */
+.book { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); gap: 2.5rem; align-items: start; }
+.book h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1; margin: 0 0 1rem; }
+.book-meta { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem 1.4rem; display: grid; gap: 0.9rem; margin: 0; }
+.book-meta div { display: grid; gap: 0.1rem; }
+.book-meta dt { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.book-meta dd { margin: 0; }
+
+/* Sky scene */
+.cosmos {
+  --ax: 50%; --ay: 40%;
+  border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  background: var(--night); color: var(--night-fg); max-width: 46rem;
+}
+.stage { position: relative; height: 300px; overflow: hidden; }
+.stage::before {
+  content: ""; position: absolute; left: 0; top: 0; width: 1px; height: 1px; border-radius: 50%; background: #cfd6ff;
+  box-shadow:
+    30px 40px 0 #cfd6ff, 88px 190px 0 #9aa6e0, 140px 70px 0 #cfd6ff, 210px 250px 0 #9aa6e0, 262px 30px 0 #cfd6ff,
+    318px 140px 0 #9aa6e0, 372px 210px 0 #cfd6ff, 420px 60px 0 #9aa6e0, 468px 260px 0 #cfd6ff, 520px 110px 0 #cfd6ff,
+    566px 30px 0 #9aa6e0, 612px 180px 0 #cfd6ff, 660px 90px 0 #9aa6e0, 15px 120px 0 #9aa6e0, 175px 150px 0 #cfd6ff,
+    250px 120px 0 #9aa6e0, 345px 20px 0 #cfd6ff, 440px 160px 0 #9aa6e0, 590px 255px 0 #cfd6ff, 120px 270px 0 #9aa6e0;
+  opacity: 0.7;
+}
+.glow {
+  position: absolute; left: var(--ax); top: var(--ay); width: 420px; height: 420px; max-width: 120%;
+  transform: translate(-50%, -50%); pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c) 38%, transparent) 0%, transparent 62%);
+  transition: left 0.9s cubic-bezier(.2,.7,.2,1), top 0.9s cubic-bezier(.2,.7,.2,1), --c 0.9s ease;
+}
+.beam {
+  position: absolute; left: var(--ax); top: var(--ay); bottom: 30px; width: 1px; transform: translateX(-50%);
+  background: linear-gradient(to bottom, var(--c), transparent); opacity: 0.8; pointer-events: none;
+  transition: left 0.9s cubic-bezier(.2,.7,.2,1), top 0.9s cubic-bezier(.2,.7,.2,1), --c 0.9s ease;
+}
+.beam::after {
+  content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 5px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 10px 2px var(--c); animation: travel 2.2s linear infinite;
+}
+@keyframes travel { from { top: 0; opacity: 1; } to { top: 100%; opacity: 0; } }
+.horizon { position: absolute; left: 16px; right: 16px; bottom: 30px; height: 1px; background: color-mix(in srgb, var(--night-fg) 22%, transparent); }
+.horizon-label { position: absolute; left: 16px; bottom: 8px; margin: 0; color: var(--night-muted); font-size: 0.68rem; }
+.orb {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); padding: 0; border: 0;
+  transform: translate(-50%, -50%); border-radius: 50%; cursor: pointer; color: inherit; font: inherit;
+  background: radial-gradient(circle at 35% 32%, #ffffff 0%, var(--oc) 48%, color-mix(in srgb, var(--oc) 45%, #000) 100%);
+  box-shadow: 0 0 16px 1px color-mix(in srgb, var(--oc) 70%, transparent);
+  transition: transform 0.45s cubic-bezier(.2,.7,.2,1), box-shadow 0.45s ease;
+}
+.orb:hover, .orb.on { transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 34px 6px color-mix(in srgb, var(--oc) 80%, transparent); }
+.orb:focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 50%; }
+.orb span {
+  position: absolute; top: calc(100% + 0.6rem); left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--night-muted); white-space: nowrap; transition: color 0.3s;
+}
+.orb.on span, .orb:hover span { color: var(--night-fg); }
+.read { padding: 1.4rem 1.5rem 1.6rem; border-top: 1px solid color-mix(in srgb, var(--night-fg) 14%, transparent); display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: 1.5rem; align-items: center; min-height: 9.5rem; }
+.read .when { font-family: var(--font-display); font-size: clamp(2rem, 6vw, 3rem); line-height: 1; color: var(--c); transition: --c 0.9s ease; overflow-wrap: anywhere; }
+.read .when small { display: block; margin-top: 0.4rem; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--night-muted); }
+.read p { margin: 0; max-width: 28rem; color: var(--night-fg); font-size: 1rem; }
+.read .fade { animation: fadeUp 0.55s cubic-bezier(.2,.7,.2,1); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.cosmos-note { margin: 0.9rem 0 0; }
+
+/* Tools */
+.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+.stack h3 { margin: 0 0 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.stack ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+
+/* Contact */
+.mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin: 1.5rem 0; }
+.mail code { font-family: var(--font-mono); font-size: 1rem; word-break: break-all; user-select: all; }
+.mail button { font: inherit; font-size: 0.85rem; color: var(--fg); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 0.3rem 0.8rem; cursor: pointer; }
+.mail button:hover { border-color: var(--accent); color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+footer { border-top: 1px solid var(--line); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; color: var(--muted); font-size: 0.85rem; }
+
+@media (max-width: 800px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-block: 2.5rem 3rem; }
+  .sky { height: 380px; }
+  .sec-head, .book { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .book { gap: 1.5rem; }
+  .work li { grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+  .awards li { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+  .chips { justify-content: flex-start; }
+  section { padding-block: 3.25rem; }
+}
+@media (max-width: 560px) {
+  .thumb { flex-basis: 64px; width: 64px; height: 64px; }
+  .orb span { display: none; }
+  .orb.on span { display: block; }
+  .read { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+  .beam::after { animation: none; top: 50%; }
+  .read .fade { animation: none; }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Kshitij Sinha</a>
+    <nav aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#awards">Awards</a>
+      <a href="#work">Work</a>
+      <a href="#writing">Writing</a>
+      <a href="#sky">Sky</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch colour theme">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <div>
+      <span class="mono">Student, builder, writer</span>
+      <h1>Machine learning, robots, and <em>stories</em> about the stars.</h1>
+      <p class="lede">I recently finished school at Hill Top School in Jamshedpur. I build machine learning models and robots, design in CAD and Blender, make websites, and write science fiction.</p>
+      <div class="actions">
+        <a class="btn solid" href="#work">See the work</a>
+        <a class="btn" href="#writing">Read Atheria</a>
+      </div>
+    </div>
+    <div class="sky" id="skyMap">
+      <canvas id="stars" aria-hidden="true"></canvas>
+      <button class="node" type="button" data-tag="ml" aria-pressed="false" style="left:26%;top:22%">Machine learning</button>
+      <button class="node" type="button" data-tag="web" aria-pressed="false" style="left:72%;top:14%">Web design</button>
+      <button class="node" type="button" data-tag="robotics" aria-pressed="false" style="left:78%;top:50%">Robotics</button>
+      <button class="node" type="button" data-tag="writing" aria-pressed="false" style="left:56%;top:78%">Writing</button>
+      <button class="node" type="button" data-tag="astro" aria-pressed="false" style="left:22%;top:62%">Astronomy</button>
+      <p class="mono sky-hint">Select a star to filter the work below</p>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="sec-head">
+      <span class="mono">About</span>
+      <div class="sec-body">
+        <h2>I like taking things apart to see how they work.</h2>
+        <p>That habit started with websites and moved on to neural networks, robots and the physics behind them. I prefer to understand a method from first principles before I reach for a library, which is why my first network was written without one.</p>
+        <p class="muted">Most of what I know came from books, documentation, and building things that did not work the first time.</p>
+        <blockquote class="quote">Believe nothing. Question everything.<small>Signature quote</small></blockquote>
+        <ol class="timeline">
+          <li><span class="mono">About 2017</span>Started designing websites, and have kept at it since.</li>
+          <li><span class="mono">Self-study</span>Worked through machine learning textbooks and implemented the methods in Python.</li>
+          <li><span class="mono">Grades 11 and 12</span>Won machine learning and competitive programming competitions, and built robots with a team.</li>
+          <li><span class="mono">2025</span>Began publishing Atheria, a science-fiction novel, on Wattpad.</li>
+          <li><span class="mono">ISC</span>Finished school at Hill Top School with 94.5% in the board examination.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="awards">
+    <div class="sec-head">
+      <span class="mono">Awards</span>
+      <div class="sec-body">
+        <h2>Competitions and results</h2>
+        <ul class="awards">
+          <li>
+            <span class="mono">Robotics</span>
+            <div>
+              <h3>Best Design Document, national robotics competition</h3>
+              <p>Our warehouse logistics robot did not win the event. The judges gave us the design document award for its CAD design and the way we presented the documentation.</p>
+            </div>
+          </li>
+          <li>
+            <span class="mono">Machine learning</span>
+            <div>
+              <h3>Two machine learning competition wins, back to back</h3>
+              <p>Won in Grade 11 and again in Grade 12.</p>
+            </div>
+          </li>
+          <li>
+            <span class="mono">Programming</span>
+            <div>
+              <h3>Inter-school competitive programming wins</h3>
+              <p>Won competitions in both Grade 11 and Grade 12.</p>
+            </div>
+          </li>
+          <li>
+            <span class="mono">School</span>
+            <div>
+              <h3>94.5% in the ISC board examination</h3>
+              <p>Completed high school at Hill Top School, Jamshedpur.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-head">
+      <span class="mono">Work</span>
+      <div class="sec-body">
+        <h2>Selected projects</h2>
+        <div class="filter-bar" aria-live="polite">
+          <span class="muted" id="filterLabel">Showing everything. Use the stars at the top to filter.</span>
+          <button class="clear" id="clearBtn" type="button" hidden>Clear filter</button>
+        </div>
+        <ul class="work" id="workList">
+          <li data-tags="ml">
+            <div>
+              <h3>Knee MRI report structuring</h3>
+              <p>Radiologists dictate reports as free text, which makes their findings hard to analyse across many patients. I fine-tuned a small open-source language model (0.5 billion parameters, using QLoRA) to turn knee MRI reports into structured JSON, covering the type, location and severity of findings, along with a plain-language summary. In test runs it approached 94% accuracy compared with frontier models, and it could cut the cost of the task by up to 99%.</p>
+              <p class="muted note">This is a research prototype trained on synthetic data. Validation, scaling and reliability testing are still ahead.</p>
+              <div class="item-links"><a href="https://huggingface.co/caffeine-and-code/radiology_adapter/tree/main" target="_blank" rel="noopener">Model on Hugging Face</a></div>
+            </div>
+            <div class="chips"><span class="chip">Python</span><span class="chip">QLoRA</span><span class="chip">Fine-tuning</span><span class="chip">Clinical NLP</span></div>
+          </li>
+          <li data-tags="ml">
+            <div>
+              <h3>Neural network from scratch</h3>
+              <p>A feedforward network written without any machine learning libraries, trained to predict weather on a dataset I put together. It reached 94% accuracy. I built it while working through a textbook.</p>
+            </div>
+            <div class="chips"><span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">Feedforward NN</span></div>
+          </li>
+          <li data-tags="robotics">
+            <div class="body">
+              <!-- Photo slot: replace this div with <img class="thumb" src="YOUR-PHOTO-URL" alt="Warehouse logistics robot"> -->
+              <div class="thumb" aria-hidden="true">Photo</div>
+              <div>
+                <h3>Warehouse logistics robot</h3>
+                <p>An automated forklift-style robot for moving goods around a warehouse, built with my team for a national robotics competition. We did not win the event, but its CAD design and documentation won the Best Design Document award.</p>
+              </div>
+            </div>
+            <div class="chips"><span class="chip">CAD</span><span class="chip">Mechanical design</span><span class="chip">Team project</span></div>
+          </li>
+          <li data-tags="robotics">
+            <div class="body">
+              <!-- Photo slot: replace this div with <img class="thumb" src="YOUR-PHOTO-URL" alt="Line follower robot"> -->
+              <div class="thumb" aria-hidden="true">Photo</div>
+              <div>
+                <h3>Line follower</h3>
+                <p>A robot that follows a marked path using sensor feedback.</p>
+              </div>
+            </div>
+            <div class="chips"><span class="chip">Sensors</span><span class="chip">Control</span></div>
+          </li>
+          <li data-tags="robotics">
+            <div class="body">
+              <!-- Photo slot: replace this div with <img class="thumb" src="YOUR-PHOTO-URL" alt="Pick and place robot"> -->
+              <div class="thumb" aria-hidden="true">Photo</div>
+              <div>
+                <h3>Pick and place robot</h3>
+                <p>A robot that picks an object up and puts it down somewhere else.</p>
+              </div>
+            </div>
+            <div class="chips"><span class="chip">Manipulator</span><span class="chip">Control</span></div>
+          </li>
+          <li data-tags="web">
+            <div>
+              <h3>Medical research collaboration platform</h3>
+              <p>A platform where medical researchers can work together. It brings together my front-end design and back-end work in one product.</p>
+            </div>
+            <div class="chips"><span class="chip">JavaScript</span><span class="chip">Django</span><span class="chip">UI design</span></div>
+          </li>
+          <li data-tags="web">
+            <div>
+              <h3>Santushti Rasoi</h3>
+              <p>A website I made for a company selling artisan Indian sweets in Jamshedpur.</p>
+              <div class="item-links"><a href="https://santushti-rasoi.vercel.app/" target="_blank" rel="noopener">Visit the site</a><a href="https://github.com/code-with-caffeine/Santushti-Rasoi" target="_blank" rel="noopener">Code</a></div>
+            </div>
+            <div class="chips"><span class="chip">JavaScript</span><span class="chip">Client project</span></div>
+          </li>
+          <li data-tags="web">
+            <div>
+              <h3>Algo Finder</h3>
+              <p>A tool for students who are learning a computer science algorithm and need good material to study from.</p>
+              <div class="item-links"><a href="https://github.com/code-with-caffeine/algo-finder" target="_blank" rel="noopener">Code</a></div>
+            </div>
+            <div class="chips"><span class="chip">Algorithms</span><span class="chip">Education</span></div>
+          </li>
+          <li data-tags="ml astro">
+            <div>
+              <h3>Stellar object classifier</h3>
+              <p>A model that classifies stellar objects from astronomical data. It joins two things I enjoy: space science and practical machine learning.</p>
+            </div>
+            <div class="chips"><span class="chip">Python</span><span class="chip">Scikit-learn</span><span class="chip">Pandas</span></div>
+          </li>
+          <li data-tags="writing">
+            <div>
+              <h3>Atheria</h3>
+              <p>An ongoing science-fiction novel published on Wattpad. <a href="#writing">More below.</a></p>
+            </div>
+            <div class="chips"><span class="chip">Fiction</span><span class="chip">Worldbuilding</span></div>
+          </li>
+        </ul>
+        <p class="more"><a href="https://github.com/code-with-caffeine" target="_blank" rel="noopener">More code on GitHub</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="sec-head">
+      <span class="mono">Writing</span>
+      <div class="sec-body">
+        <div class="book">
+          <div>
+            <h3>Atheria</h3>
+            <p>A nuclear war has ended everything that kept the surface alive. The survivors live underground, in cities that depend on a vast network built to store and distribute energy. Now that network is failing, with sudden surges and blackouts.</p>
+            <p>In the Vats, an ordinary boy is learning how his society works. He is also slowly making his way into the Grand Archive, which holds what remains of the old world's knowledge. The question is whether he can piece it together and find a way to save his world, while a rigid society pushes back.</p>
+            <p><a class="btn solid" href="https://www.wattpad.com/story/403686910-atheria" target="_blank" rel="noopener">Read on Wattpad</a></p>
+          </div>
+          <dl class="book-meta">
+            <div><dt>Genre</dt><dd>Science fiction, dystopian</dd></div>
+            <div><dt>Status</dt><dd>Ongoing, 3 parts so far</dd></div>
+            <div><dt>Latest part</dt><dd>4 November 2025</dd></div>
+            <div><dt>Where</dt><dd>Wattpad, as kshitij_sinha</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="drawing">
+    <div class="sec-head">
+      <span class="mono">Drawing</span>
+      <div class="sec-body">
+        <h2>Pencil on paper</h2>
+        <p class="muted">Alongside CAD and Blender, I draw by hand. This is one of my sketches.</p>
+        <figure class="sketch">
+          <img src="drawing.jpg" alt="Pencil sketch by Kshitij">
+          <!-- <div class="sketch-frame"><span class="mono">Space for a pencil sketch</span></div> -->
+          <figcaption class="mono"> 2026, pencil on paper</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="sky">
+    <div class="sec-head">
+      <span class="mono">Sky</span>
+      <div class="sec-body">
+        <h2>How old is the light you are looking at?</h2>
+        <p class="muted">Astronomy is where most of my reading goes. Move over an object, or tap one, and follow its light to you.</p>
+        <div class="cosmos" id="cosmos">
+          <div class="stage">
+            <div class="glow"></div>
+            <div class="beam"></div>
+            <div class="horizon"></div>
+            <p class="mono horizon-label">You are here</p>
+            <button class="orb" type="button" data-i="0" style="--x:12%;--y:36%;--s:30px;--oc:#ffd27a"><span>Sun</span></button>
+            <button class="orb" type="button" data-i="1" style="--x:31%;--y:60%;--s:20px;--oc:#ff8d6b"><span>Proxima</span></button>
+            <button class="orb" type="button" data-i="2" style="--x:50%;--y:28%;--s:26px;--oc:#a8c8ff"><span>Sirius</span></button>
+            <button class="orb" type="button" data-i="3" style="--x:69%;--y:56%;--s:36px;--oc:#ff9a52"><span>Betelgeuse</span></button>
+            <button class="orb" type="button" data-i="4" style="--x:88%;--y:32%;--s:42px;--oc:#c3a9ff"><span>Andromeda</span></button>
+          </div>
+          <div class="read">
+            <div class="when" id="when"></div>
+            <p id="sentence"></p>
+          </div>
+        </div>
+        <p class="mono cosmos-note">Objects run left to right by distance. Distances are rounded, and Betelgeuse's is uncertain.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="sec-head">
+      <span class="mono">Tools</span>
+      <div class="sec-body">
+        <h2>What I work with</h2>
+        <div class="stack">
+          <div><h3>Languages</h3><ul><li>Python</li><li>JavaScript</li><li>HTML and CSS</li></ul></div>
+          <div><h3>Machine learning</h3><ul><li>TensorFlow</li><li>Scikit-learn</li><li>Pandas and data analysis</li></ul></div>
+          <div><h3>Web</h3><ul><li>React</li><li>Django</li><li>Git</li></ul></div>
+          <div><h3>Design and making</h3><ul><li>CAD</li><li>Pencil drawing and sketching</li><li>3D modelling in Blender</li><li>Animation in Blender</li><li>Figma</li><li>Robotics</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="sec-head">
+      <span class="mono">Contact</span>
+      <div class="sec-body">
+        <h2>Get in touch</h2>
+        <p>If you want to talk about a project, the book, or anything in the sky, write to me.</p>
+        <div class="mail">
+          <code id="mailText">kshitijshina@gmail.com</code>
+          <button type="button" id="copyBtn">Copy address</button>
+        </div>
+        <div class="links">
+          <a href="https://www.linkedin.com/in/kshitij-sinha-8630442b2/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/code-with-caffeine" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://huggingface.co/caffeine-and-code" target="_blank" rel="noopener">Hugging Face</a>
+          <a href="https://www.instagram.com/kshitijsinha7/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://x.com/Kshitij14616111" target="_blank" rel="noopener">X</a>
+          <a href="https://www.wattpad.com/user/kshitij_sinha" target="_blank" rel="noopener">Wattpad</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Kshitij Sinha</span>
+    <span>Hill Top School, Jamshedpur</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Theme toggle */
+  try { var saved = localStorage.getItem('ks-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ks-theme', next); } catch (e) {}
+  });
+
+  /* Hero star field with constellation lines */
+  var sky = document.getElementById('skyMap');
+  var canvas = document.getElementById('stars');
+  var ctx = canvas.getContext('2d');
+  var nodes = Array.prototype.slice.call(sky.querySelectorAll('.node'));
+  var stars = [], w = 0, h = 0, px = 0, py = 0, tx = 0, ty = 0;
+  var edges = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [0, 2]];
+
+  function size() {
+    var dpr = window.devicePixelRatio || 1;
+    w = sky.clientWidth; h = sky.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var count = Math.round(w * h / 2600);
+    stars = [];
+    for (var i = 0; i < count; i++) {
+      stars.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.3 + 0.3, d: Math.random() * 0.9 + 0.1, p: Math.random() * 6.28 });
+    }
+  }
+  function color(name) { return getComputedStyle(root).getPropertyValue(name).trim() || '#cfd6ff'; }
+  function draw(t) {
+    var star = color('--star'), accent = color('--accent');
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = star;
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      var x = s.x + px * 14 * s.d, y = s.y + py * 14 * s.d;
+      ctx.globalAlpha = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(t / 900 + s.p));
+      ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.283); ctx.fill();
+    }
+    ctx.globalAlpha = 0.45; ctx.strokeStyle = accent; ctx.lineWidth = 1;
+    var pts = nodes.map(function (n) { return { x: n.offsetLeft + px * 6, y: n.offsetTop + py * 6 }; });
+    ctx.beginPath();
+    edges.forEach(function (e) { ctx.moveTo(pts[e[0]].x, pts[e[0]].y); ctx.lineTo(pts[e[1]].x, pts[e[1]].y); });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+  function loop(t) { px += (tx - px) * 0.05; py += (ty - py) * 0.05; draw(t); requestAnimationFrame(loop); }
+  size();
+  if (reduce) { draw(0); } else { requestAnimationFrame(loop); }
+  window.addEventListener('resize', function () { size(); if (reduce) draw(0); });
+  sky.addEventListener('pointermove', function (e) {
+    var r = sky.getBoundingClientRect();
+    tx = (e.clientX - r.left) / r.width - 0.5; ty = (e.clientY - r.top) / r.height - 0.5;
+  });
+  sky.addEventListener('pointerleave', function () { tx = 0; ty = 0; });
+  new MutationObserver(function () { if (reduce) draw(0); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+  /* Filter work list from the constellation */
+  var names = { ml: 'machine learning', web: 'web design', robotics: 'robotics', writing: 'writing', astro: 'astronomy' };
+  var items = Array.prototype.slice.call(document.querySelectorAll('#workList li'));
+  var label = document.getElementById('filterLabel');
+  var clearBtn = document.getElementById('clearBtn');
+  var active = null;
+  function apply(tag) {
+    active = tag;
+    nodes.forEach(function (n) { n.setAttribute('aria-pressed', String(n.dataset.tag === tag)); });
+    items.forEach(function (li) { li.classList.toggle('dim', !!tag && li.dataset.tags.split(' ').indexOf(tag) === -1); });
+    if (tag) {
+      var n = items.filter(function (li) { return li.dataset.tags.split(' ').indexOf(tag) !== -1; }).length;
+      label.textContent = 'Highlighting ' + n + (n === 1 ? ' project' : ' projects') + ' tagged ' + names[tag] + '.';
+      clearBtn.hidden = false;
+    } else {
+      label.textContent = 'Showing everything. Use the stars at the top to filter.';
+      clearBtn.hidden = true;
+    }
+  }
+  nodes.forEach(function (n) {
+    n.addEventListener('click', function () {
+      var tag = n.dataset.tag;
+      apply(active === tag ? null : tag);
+      if (active) document.getElementById('work').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  clearBtn.addEventListener('click', function () { apply(null); });
+
+  /* Sky scene: hover tints the sky and sends the light toward you */
+  var year = new Date().getFullYear();
+  function yearsAgo(ly) { return Math.round(year - ly); }
+  var objs = [
+    { c: '#ffd27a', x: 12, y: 36, when: '8 minutes', cap: 'ago', text: 'Sunlight takes about eight minutes to reach you, so you always see the Sun a little in the past.' },
+    { c: '#ff8d6b', x: 31, y: 60, when: String(yearsAgo(4.24)), cap: 'light left around', text: 'Proxima Centauri, the nearest star after the Sun, is 4.24 light-years away. You see it as it was a few years ago.' },
+    { c: '#a8c8ff', x: 50, y: 28, when: String(yearsAgo(8.6)), cap: 'light left around', text: 'Sirius, the brightest star in the night sky, is about 8.6 light-years away.' },
+    { c: '#ff9a52', x: 69, y: 56, when: String(yearsAgo(550)), cap: 'light left around', text: 'Betelgeuse is roughly 550 light-years away, so its light set out before printed books were common.' },
+    { c: '#c3a9ff', x: 88, y: 32, when: '2.5 million years', cap: 'ago', text: 'The Andromeda Galaxy is about 2.5 million light-years away. This light left before modern humans existed.' }
+  ];
+  var cosmos = document.getElementById('cosmos');
+  var orbs = Array.prototype.slice.call(cosmos.querySelectorAll('.orb'));
+  var whenEl = document.getElementById('when');
+  var sentEl = document.getElementById('sentence');
+  var current = -1, touched = false;
+
+  function show(i) {
+    if (i === current) return;
+    current = i;
+    var o = objs[i];
+    cosmos.style.setProperty('--c', o.c);
+    cosmos.style.setProperty('--ax', o.x + '%');
+    cosmos.style.setProperty('--ay', o.y + '%');
+    orbs.forEach(function (b, k) { b.classList.toggle('on', k === i); });
+    whenEl.innerHTML = o.when + '<small>' + o.cap + '</small>';
+    sentEl.textContent = o.text;
+    [whenEl, sentEl].forEach(function (el) { el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade'); });
+  }
+  orbs.forEach(function (b) {
+    var i = parseInt(b.dataset.i, 10);
+    var pick = function () { touched = true; show(i); };
+    b.addEventListener('pointerenter', pick);
+    b.addEventListener('focus', pick);
+    b.addEventListener('click', pick);
+  });
+  show(1);
+
+  /* Gentle idle cycle until the visitor interacts */
+  var visible = false;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.4 }).observe(cosmos);
+  }
+  if (!reduce) {
+    setInterval(function () { if (!touched && visible && !document.hidden) show((current + 1) % objs.length); }, 4200);
+  }
+
+  /* Custom cursor: a star that becomes a crescent moon over links, with a fading trail */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var head = document.createElement('div');
+    head.className = 'cur-head';
+    head.setAttribute('aria-hidden', 'true');
+    head.innerHTML =
+      '<div class="cur-body">' +
+        '<div class="cur-spin"><svg class="cur-star" viewBox="0 0 24 24"><path d="M12 1C12.8 7.5 16.5 11.2 23 12C16.5 12.8 12.8 16.5 12 23C11.2 16.5 7.5 12.8 1 12C7.5 11.2 11.2 7.5 12 1Z"/></svg></div>' +
+        '<svg class="cur-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' +
+      '</div>';
+    var trail = document.createElement('canvas');
+    trail.className = 'cur-trail';
+    trail.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(trail);
+    document.body.appendChild(head);
+    var tctx = trail.getContext('2d');
+    var tw = 0, th = 0;
+    function fitTrail() {
+      var dpr = window.devicePixelRatio || 1;
+      tw = window.innerWidth; th = window.innerHeight;
+      trail.width = tw * dpr; trail.height = th * dpr;
+      tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    fitTrail();
+    window.addEventListener('resize', fitTrail);
+
+    var pts = [], sparks = [], started = false, lastX = 0, lastY = 0, ink = '#a9b4ff', frame = 0, inNight = false;
+    var invSel = '.btn.solid, .node[aria-pressed="true"]';
+    var LIFE = 520;
+    var hotSel = 'a, button, select, .orb, .node, summary, [role="button"]';
+
+    function tickTrail() {
+      var now = performance.now();
+      frame++;
+      if (frame % 30 === 1) ink = getComputedStyle(root).getPropertyValue('--accent').trim() || ink;
+      tctx.clearRect(0, 0, tw, th);
+      while (pts.length && now - pts[0].t > LIFE) pts.shift();
+      var col = inNight ? '#cfd6ff' : ink;
+      tctx.strokeStyle = col; tctx.fillStyle = col; tctx.lineCap = 'round';
+      for (var i = 1; i < pts.length; i++) {
+        if (pts[i].t - pts[i - 1].t > 120) continue;
+        var a = 1 - (now - pts[i].t) / LIFE;
+        tctx.globalAlpha = Math.max(0, a) * 0.38;
+        tctx.lineWidth = 0.6 + 4.2 * a;
+        tctx.beginPath(); tctx.moveTo(pts[i - 1].x, pts[i - 1].y); tctx.lineTo(pts[i].x, pts[i].y); tctx.stroke();
+      }
+      sparks = sparks.filter(function (s) { return now - s.t < s.life; });
+      tctx.lineWidth = 1;
+      for (var j = 0; j < sparks.length; j++) {
+        var s = sparks[j], k = 1 - (now - s.t) / s.life;
+        s.x += s.vx; s.y += s.vy;
+        var sz = s.s * (0.4 + 0.6 * k);
+        tctx.globalAlpha = Math.max(0, k) * 0.5;
+        tctx.beginPath();
+        tctx.moveTo(s.x - sz, s.y); tctx.lineTo(s.x + sz, s.y);
+        tctx.moveTo(s.x, s.y - sz); tctx.lineTo(s.x, s.y + sz);
+        tctx.stroke();
+      }
+      tctx.globalAlpha = 1;
+      requestAnimationFrame(tickTrail);
+    }
+
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+      var x = e.clientX, y = e.clientY;
+      head.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)';
+      head.style.opacity = 1;
+      if (!started) {
+        started = true; lastX = x; lastY = y;
+        root.classList.add('has-cursor');
+        if (!reduce) requestAnimationFrame(tickTrail);
+      }
+      if (reduce) return;
+      if (Math.hypot(x - lastX, y - lastY) > 2) {
+        var now = performance.now();
+        pts.push({ x: x, y: y, t: now });
+        lastX = x; lastY = y;
+        if (Math.random() < 0.35) {
+          sparks.push({ x: x + (Math.random() - 0.5) * 10, y: y + (Math.random() - 0.5) * 10, vx: (Math.random() - 0.5) * 0.4, vy: Math.random() * 0.5 + 0.1, t: now, life: 700 + Math.random() * 500, s: 1.5 + Math.random() * 2.5 });
+        }
+      }
+    });
+    document.addEventListener('pointerover', function (e) {
+      var t = e.target, has = function (sel) { return !!(t.closest && t.closest(sel)); };
+      inNight = has('.cosmos');
+      head.classList.toggle('hot', has(hotSel));
+      head.classList.toggle('inv', has(invSel));
+      head.classList.toggle('night', inNight);
+    });
+    document.addEventListener('pointerdown', function () { head.classList.add('down'); });
+    document.addEventListener('pointerup', function () { head.classList.remove('down'); });
+    document.documentElement.addEventListener('mouseleave', function () { head.style.opacity = 0; });
+  }
+
+  /* Copy email */
+  var copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', function () {
+    var text = document.getElementById('mailText').textContent;
+    var done = function () { copyBtn.textContent = 'Copied'; setTimeout(function () { copyBtn.textContent = 'Copy address'; }, 1800); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('mailText'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      copyBtn.textContent = 'Press copy';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, fallback); } else { fallback(); }
+  });
+})();
+</script>
+
+</body></html>          color: #ffffff;
             overflow-x: hidden;
             line-height: 1.6;
         }
